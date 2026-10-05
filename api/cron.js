@@ -38,7 +38,7 @@ function eventsFor(s, week, T) {
     const starts = new Set(todays.map(l => l.start));
     const top = open.filter(t => t.hrs > 0).sort((a, b) => b.u - a.u).slice(0, 3).map(t => t.name);
     out.push({
-      key: 'm' + T.day, title: 'בוקר טוב',
+      key: 'm' + T.day, title: 'בוקר טוב' + (cfg.name ? ', ' + String(cfg.name).slice(0, 20) : ''),
       body: [starts.size ? `${starts.size} שיעורים היום` : 'אין שיעורים היום', top.length ? 'בוער: ' + top.join(', ') : ''].filter(Boolean).join(' · '),
     });
   }
