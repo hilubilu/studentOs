@@ -119,6 +119,11 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
 .mc{aspect-ratio:1;border:0;border-radius:12px;background:var(--card);cursor:pointer;padding:4px;display:flex;flex-direction:column;align-items:center;gap:4px;font:inherit;color:inherit}
 .mc b{font-weight:500}.mc.dim{opacity:.4}.mc.td{outline:2px solid var(--ac)}
 .dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center}.dots i{width:6px;height:6px;border-radius:50%}
+
+.mc.sm{aspect-ratio:auto;padding:9px 0;border-radius:10px}.mc.sel{background:var(--ac);color:#fff}.mc:disabled{opacity:.3;cursor:default}
+#mp{background:var(--card);border-radius:16px;padding:10px;display:grid;gap:8px}
+.ev.edit{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0}
+.ev .x{font-size:18px;padding:2px 6px}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
@@ -153,7 +158,7 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
 </section>
 
 <section id="addsec"><button class="x" id="cx" type="button" aria-label="סגור" style="float:left;font-size:22px">✕</button>
-  <h2>משימה חדשה</h2>
+  <h2 id="fh">משימה חדשה</h2>
   <form id="f">
     <input id="n" required placeholder="שם המשימה" aria-label="שם המשימה" autocomplete="off">
     <div class="two" style="grid-template-columns:2fr 1fr">
@@ -164,11 +169,12 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
     <div class="strip" id="dc"></div>
     <div class="two">
       <input id="tmx" inputmode="numeric" placeholder="שעה, למשל 08:30" aria-label="שעה" maxlength="5" autocomplete="off">
-      <div style="position:relative"><button type="button" class="chip" id="dmore">תאריך אחר</button><input id="dx" type="date" aria-label="תאריך אחר" class="vh"></div>
+      <button type="button" class="chip" id="dmore">תאריך אחר</button>
     </div>
+    <div id="mp" hidden></div>
     <input id="d" type="hidden"><input id="tm" type="hidden">
     <div class="hint" id="dh"></div>
-    <button class="btn" type="submit">הוסף משימה</button>
+    <button class="btn" type="submit" id="fs">הוסף משימה</button>
   </form>
 </section>
 
@@ -189,6 +195,8 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
     <textarea id="pt" rows="5" placeholder="או הדביקו כאן טקסט, שורה לכל אירוע:&#10;12.10 חופש סוכות&#10;3/11 מבחן במתמטיקה"></textarea>
     <button class="btn" type="button" id="pb">הוסף אירועים</button>
     <div class="hint" id="pm"></div>
+    <div class="two"><input id="evn" placeholder="אירוע חדש" aria-label="שם האירוע" autocomplete="off"><input id="evd" type="date" aria-label="תאריך האירוע"></div>
+    <button class="btn alt" type="button" id="eva">הוסף אירוע</button>
     <div id="evl"></div>
   </div>
   <div class="box">
@@ -231,7 +239,7 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
 
 <script>
 const $=id=>document.getElementById(id);
-const SYNCK=['so_tasks','so_hist','so_gr','so_days','so_mine','so_picked','so_cls','so_name'];
+const SYNCK=['so_tasks','so_hist','so_gr','so_days','so_mine','so_picked','so_cls','so_name','so_ev'];
 const store={
   get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v));if(SYNCK.includes(k)){localStorage.setItem('so_dirty','1');if(window.schedSync)schedSync()}}catch(e){}}
@@ -266,6 +274,7 @@ function render(){
         <div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · כ-${avg(t.sub)||t.est} דק׳</div>
         <div class="row" data-id="${t.id}">
           <button class="btn" data-a="done">סיימתי</button>
+          <button class="btn alt" data-a="edit">ערוך</button>
           <button class="btn alt" data-a="focus">פוקוס 25 דק׳</button>
           <button class="btn alt" data-a="del">מחק</button>
         </div></div></div>`).join(''):'<div class="empty">אין משימות פתוחות. הוסיפו משימה כדי להתחיל.</div>';
@@ -277,7 +286,10 @@ function save(){store.set('so_tasks',tasks);store.set('so_hist',hist);pushSync()
 
 $('f').addEventListener('submit',e=>{
   e.preventDefault();
-  tasks.push({id:Date.now(),name:$('n').value.trim(),sub:$('s').value.trim(),est:+$('e').value,due:$('d').value+'T'+$('tm').value,done:false});
+  const fv={name:$('n').value.trim(),sub:$('s').value.trim(),est:+$('e').value,due:$('d').value+'T'+$('tm').value};
+  const ed=editId&&tasks.find(x=>x.id===editId);
+  if(ed)Object.assign(ed,fv);else tasks.push({id:Date.now(),...fv,done:false});
+  editId=null;$('fh').textContent='משימה חדשה';$('fs').textContent='הוסף משימה';
   save();$('f').reset();$('e').value=30;$('sug').textContent='';setDef();$('addsec').classList.remove('open');render();
 });
 $('s').addEventListener('input',()=>{
@@ -288,6 +300,7 @@ $('s').addEventListener('input',()=>{
 $('tasks').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;
   const id=+b.parentElement.dataset.id,t=tasks.find(x=>x.id===id);
+  if(b.dataset.a==='edit'){openEdit(t);return}
   if(b.dataset.a==='focus'){pom={end:Date.now()+25*6e4,mode:'work',name:t.name};return pomUI()}
   if(b.dataset.a==='del'){t.del=Date.now();toast('המשימה נמחקה',()=>{delete t.del;save();render()})}
   else{
@@ -338,9 +351,19 @@ $('tmx').addEventListener('input',()=>{
   if(/^([01]\d|2[0-3]):[0-5]\d$/.test(v)){touched=true;$('tm').value=v}
 });
 $('tmx').addEventListener('blur',()=>{$('tmx').value=$('tm').value});
-$('dmore').onclick=()=>{const x=$('dx');try{x.showPicker()}catch(e){x.classList.remove('vh');x.style.cssText='position:static;opacity:1;pointer-events:auto;margin-top:6px';x.focus()}};
-$('dx').onchange=()=>{if($('dx').value){touched=true;dhmsg='';$('d').value=$('dx').value;mark()}};
-function setDef(){other=false;touched=false;dhmsg='';$('d').value=iso(inDays(1));$('tm').value='08:00';buildStrip()}
+let mpM=null;
+function renderMp(){
+  const d=mpM,first=new Date(d.getFullYear(),d.getMonth(),1),start=addD(first,-first.getDay()),today=iso(new Date()),sel=$('d').value;
+  const cells=Array.from({length:42},(_,i)=>addD(start,i)),n=cells.slice(35).every(c=>c.getMonth()!==d.getMonth())?35:42;
+  $('mp').innerHTML=`<div class="cn"><button type="button" class="ghost" data-m="-1" aria-label="חודש קודם">›</button><b>${d.toLocaleDateString('he-IL',{month:'long',year:'numeric'})}</b><button type="button" class="ghost" data-m="1" aria-label="חודש הבא">‹</button></div><div class="mh">${['א','ב','ג','ד','ה','ו','ש'].map(x=>`<span>${x}</span>`).join('')}</div><div class="mg">`+cells.slice(0,n).map(c=>{const k=iso(c);return `<button type="button" class="mc sm${c.getMonth()!==d.getMonth()?' dim':''}${k===today?' td':''}${k===sel?' sel':''}" data-p="${k}" ${k<today?'disabled':''}><b>${c.getDate()}</b></button>`}).join('')+'</div>';
+}
+$('dmore').onclick=()=>{const m=$('mp');if(m.hidden){mpM=new Date($('d').value?$('d').value+'T00:00':Date.now());mpM.setDate(1);renderMp();m.hidden=false}else m.hidden=true};
+$('mp').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.m){mpM=new Date(mpM.getFullYear(),mpM.getMonth()+ +b.dataset.m,1);renderMp();return}
+  if(b.dataset.p){touched=true;dhmsg='';$('d').value=b.dataset.p;$('mp').hidden=true;mark()}
+});
+function setDef(){other=false;touched=false;dhmsg='';$('mp').hidden=true;$('d').value=iso(inDays(1));$('tm').value='08:00';buildStrip()}
 setDef();
 addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(buildStrip,200)});
 
@@ -397,9 +420,8 @@ function renderEv(){
   const up=evs.filter(e=>{const d=new Date(e.date+'T00:00');return d>=t&&d<=lim}).slice(0,3);
   $('evsec').hidden=clear||!up.length;
   $('ev').innerHTML=up.map(e=>`<div class="ev"><span>${esc(e.title)}</span><span class="meta">${new Date(e.date+'T12:00').toLocaleDateString('he-IL',{weekday:'short',day:'numeric',month:'numeric'})}</span></div>`).join('');
-  $('evl').innerHTML=evs.map((e,i)=>`<div class="ev"><span>${esc(e.title)} <span class="meta">${e.date.split('-').reverse().join('.')}</span></span><button class="x" data-i="${i}" aria-label="מחק">✕</button></div>`).join('');
+  $('evl').innerHTML=evsHTML();
 }
-$('evl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;evs.splice(+b.dataset.i,1);store.set('so_ev',evs);renderEv()});
 
 // ---- Stage 3: in-page notifications ----
 let cfg=Object.assign({on:false,morning:'07:30',lesson:10,dl:24},store.get('so_cfg',{}));
@@ -440,7 +462,7 @@ function tick(){
   });
   tasks.filter(t=>!t.done&&!t.del).forEach(t=>{
     const hrs=(new Date(t.due)-now)/36e5;
-    if(hrs>0&&hrs<=cfg.dl+t.est/60)fire('d'+t.id,t.name,`ההגשה בעוד ${hrs<1?Math.round(hrs*60)+' דקות':Math.round(hrs)+' שעות'}. צפוי לקחת ${avg(t.sub)||t.est} דקות`);
+    if(hrs>0&&hrs<=cfg.dl+t.est/60)fire('d'+t.id+t.due,t.name,`ההגשה בעוד ${hrs<1?Math.round(hrs*60)+' דקות':Math.round(hrs)+' שעות'}. צפוי לקחת ${avg(t.sub)||t.est} דקות`);
   });
 }
 nstat();setInterval(tick,30000);tick();
@@ -558,8 +580,8 @@ function bannerUI(){
   else if(need)$('pbn').innerHTML='<div style="flex:1"><b>בחרו את השיעורים שלכם</b><div class="meta">פעם אחת, וזה נשמר. אפשר לשנות בהגדרות.</div></div><button class="btn" id="pgo">בחירה</button>';
 }
 $('pbn').addEventListener('click',e=>{if(e.target.id==='pgo'){const d=$('st');d.open=true;d.scrollIntoView({behavior:'smooth'});if(!week)$('cls').focus()}});
-$('fab').onclick=()=>{const a=$('addsec');a.classList.toggle('open');buildStrip();if(a.classList.contains('open'))$('n').focus()};
-$('cx').onclick=()=>$('addsec').classList.remove('open');
+$('fab').onclick=()=>{const a=$('addsec');if(a.classList.contains('open')){closeSheet();return}if(editId)cancelEdit();a.classList.add('open');buildStrip();$('n').focus()};
+$('cx').onclick=closeSheet;
 function todayNotes(){
   if(!week)return [];
   const d=new Date().getDay(),ms=new Set(mine||[]);
@@ -810,6 +832,52 @@ $('cbody').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(
 $('cp').onclick=()=>navCal(-1);$('cnx').onclick=()=>navCal(1);
 $('ctd').onclick=()=>{calD=new Date();calD.setHours(0,0,0,0);renderCal()};
 $('calb').onclick=()=>{const on=document.body.classList.toggle('calmode');$('calb').textContent=on?'חזרה':'יומן';renderCal();scrollTo(0,0)};
+
+// ---- edit tasks ----
+let editId=null;
+function openEdit(t){
+  editId=t.id;
+  $('fh').textContent='עריכת משימה';$('fs').textContent='שמור שינויים';
+  $('n').value=t.name;$('s').value=t.sub;$('e').value=t.est;$('sug').textContent='';
+  $('d').value=t.due.slice(0,10);$('tm').value=t.due.slice(11,16);
+  touched=true;dhmsg='';$('mp').hidden=true;buildStrip();
+  $('addsec').classList.add('open');
+}
+function cancelEdit(){
+  editId=null;$('fh').textContent='משימה חדשה';$('fs').textContent='הוסף משימה';
+  $('f').reset();$('e').value=30;$('sug').textContent='';setDef();
+}
+function closeSheet(){$('addsec').classList.remove('open');if(editId)cancelEdit()}
+
+// ---- events: add / edit / delete ----
+let evEdit=null;
+const evDate=d=>d.split('-').reverse().join('.');
+function evsHTML(){
+  return evs.map((e,i)=>evEdit===i
+    ?`<div class="ev edit"><input data-f="t" value="${esc(e.title)}" aria-label="שם האירוע"><input data-f="d" type="date" value="${e.date}" aria-label="תאריך"><button class="btn" type="button" data-a="save" data-i="${i}">שמור</button><button class="btn alt" type="button" data-a="cancel">ביטול</button></div>`
+    :`<div class="ev"><span>${esc(e.title)} <span class="meta">${evDate(e.date)}</span></span><span><button class="x" data-a="edit" data-i="${i}" aria-label="ערוך">✎</button><button class="x" data-a="del" data-i="${i}" aria-label="מחק">✕</button></span></div>`
+  ).join('');
+}
+function saveEv(){evs.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);store.set('so_ev',evs);evEdit=null;render()}
+$('evl').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const i=+b.dataset.i,a=b.dataset.a;
+  if(a==='edit'){evEdit=i;renderEv()}
+  else if(a==='cancel'){evEdit=null;renderEv()}
+  else if(a==='save'){
+    const row=b.closest('.ev'),t=row.querySelector('[data-f="t"]').value.trim(),d=row.querySelector('[data-f="d"]').value;
+    if(!t||!d)return;
+    evs[i]={title:t,date:d};saveEv();
+  }else if(a==='del'){
+    const [ev]=evs.splice(i,1);saveEv();
+    toast('האירוע נמחק',()=>{evs.push(ev);saveEv()});
+  }
+});
+$('eva').onclick=()=>{
+  const t=$('evn').value.trim(),d=$('evd').value;
+  if(!t||!d){$('pm').textContent='כתבו שם ובחרו תאריך.';return}
+  evs.push({title:t,date:d});saveEv();$('evn').value='';$('evd').value='';$('pm').textContent='האירוע נוסף';
+};
 render();setInterval(render,60000);
 </script>
 <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));</script>

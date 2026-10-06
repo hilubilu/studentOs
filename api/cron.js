@@ -51,7 +51,7 @@ function eventsFor(s, week, T, fired) {
   // deadlines
   open.filter(t => t.hrs > 0 && t.hrs <= cfg.dl + t.est / 60).forEach(t => {
     const left = t.hrs < 1 ? Math.round(t.hrs * 60) + ' דקות' : Math.round(t.hrs) + ' שעות';
-    out.push({ key: 'd' + t.id, title: t.name, body: `ההגשה בעוד ${left}. צפוי לקחת ${t.est} דקות` });
+    out.push({ key: 'd' + t.id + '|' + t.due, title: t.name, body: `ההגשה בעוד ${left}. צפוי לקחת ${t.est} דקות` });
   });
   // school changes relevant to this student
   const toks = [...mine].flatMap(k => k.split('|')).filter(x => x.length > 2);
