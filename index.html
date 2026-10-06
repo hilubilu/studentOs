@@ -78,6 +78,47 @@ main{padding-bottom:120px}
 .tp{display:flex;align-items:center;gap:6px}.tp select{flex:1;width:auto}
 dialog{border:0;border-radius:24px;padding:22px;background:var(--bg);color:var(--ink);width:min(92vw,420px)}
 dialog::backdrop{background:#0006;backdrop-filter:blur(3px)}
+
+html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100dvh;touch-action:manipulation}
+#addsec{max-height:90dvh}
+#dmore{position:relative;overflow:hidden;display:grid;place-items:center;padding:10px;font-size:15px;border-radius:12px}
+.lesson.off{opacity:.7}.lesson s{color:var(--mute)}
+.lesson time small{display:block;font-size:11px;color:var(--mute);font-weight:400}
+.tag{margin-inline-start:auto;font-style:normal;font-size:12px;color:var(--r);border:1px solid var(--r);border-radius:999px;padding:1px 10px}
+.arr{color:var(--ac)}.brk{color:var(--mute);font-size:13px;padding:2px 16px 8px}
+#snk{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(98px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;display:flex;gap:16px;align-items:center;box-shadow:0 10px 30px #0005;white-space:nowrap}
+#snk button{background:none;border:0;color:var(--ac);font-weight:700;cursor:pointer;padding:0}
+
+.vh{position:absolute;inset:0;opacity:0;pointer-events:none;width:100%;height:100%}
+#dmore{width:100%}
+#cal{display:none}
+body.calmode #cal{display:block}
+body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body.calmode #tasksec,body.calmode .setup,body.calmode #clear{display:none!important}
+.cct{display:grid;gap:10px;margin:18px 0 10px}
+.cseg{display:flex;gap:6px;flex-wrap:wrap}
+.cn{display:flex;align-items:center;gap:8px}.cn b{flex:1;text-align:center;font-weight:500}
+.cg{--n:3}
+.ghd{display:grid;grid-template-columns:34px repeat(var(--n),minmax(0,1fr))}
+.ch{background:none;border:0;cursor:pointer;padding:6px 0;text-align:center;line-height:1.2;font:inherit;color:inherit}
+.ch small{display:block;color:var(--mute);font-size:12px}.ch b{font-size:17px;font-weight:500}
+.ch.td b{background:var(--ac);color:#fff;border-radius:50%;display:inline-grid;place-items:center;width:28px;height:28px}
+.ad{padding:2px;display:grid;gap:2px;align-content:start}
+.evc{font-size:10px;background:color-mix(in srgb,var(--y) 40%,var(--card));border-radius:6px;padding:1px 4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gbd{margin-top:6px}
+.gut{position:relative;font-size:10px;color:var(--mute)}.gut span{position:absolute;right:0;transform:translateY(-7px)}
+.col{position:relative;border-inline-start:1px solid var(--line)}
+.col i{position:absolute;left:0;right:0;border-top:1px solid var(--line);opacity:.6}
+.blk{position:absolute;inset-inline:2px;background:color-mix(in srgb,var(--ac) 22%,var(--card));border-radius:8px;padding:2px 5px;overflow:hidden;font-size:11px;line-height:1.25;border-inline-start:3px solid var(--ac)}
+.blk b{font-weight:500;display:block}.blk span{color:var(--mute);display:block}
+.blk.off{background:transparent;border:1px dashed var(--r);opacity:.85}.blk.chg{border-inline-start-color:var(--y)}
+.dd{position:absolute;inset-inline:2px;height:20px;border-radius:6px;font-size:10px;padding:2px 5px;color:#1b1f1c;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;z-index:2;box-shadow:0 2px 6px #0003}
+.nl{position:absolute;left:0;right:0;border-top:2px solid var(--r);z-index:3}
+.mh,.mg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mh span{text-align:center;color:var(--mute);font-size:12px;padding-bottom:4px}
+.mc{aspect-ratio:1;border:0;border-radius:12px;background:var(--card);cursor:pointer;padding:4px;display:flex;flex-direction:column;align-items:center;gap:4px;font:inherit;color:inherit}
+.mc b{font-weight:500}.mc.dim{opacity:.4}.mc.td{outline:2px solid var(--ac)}
+.dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center}.dots i{width:6px;height:6px;border-radius:50%}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
@@ -86,10 +127,16 @@ dialog::backdrop{background:#0006;backdrop-filter:blur(3px)}
 <header>
   <div><h1 id="hello">היום</h1><div class="date" id="date"></div></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+    <button class="ghost" id="calb">יומן</button>
     <button class="ghost" id="clear">מצב ריכוז</button>
     <button class="ghost" id="theme">כהה/בהיר</button>
   </div>
 </header>
+<section id="cal">
+  <div class="cct"><div class="cseg" id="cseg"></div>
+    <div class="cn"><button class="ghost" id="cp" aria-label="הקודם">›</button><b id="cti"></b><button class="ghost" id="cnx" aria-label="הבא">‹</button><button class="ghost" id="ctd">היום</button></div></div>
+  <div id="cbody"></div>
+</section>
 
 <div id="pbn" class="task" hidden></div>
 <section id="sched">
@@ -108,18 +155,19 @@ dialog::backdrop{background:#0006;backdrop-filter:blur(3px)}
 <section id="addsec"><button class="x" id="cx" type="button" aria-label="סגור" style="float:left;font-size:22px">✕</button>
   <h2>משימה חדשה</h2>
   <form id="f">
-    <div><label for="n">שם המשימה</label><input id="n" required></div>
-    <div class="chips" id="sc"></div>
-    <div class="two">
-      <div><label for="s">מקצוע</label><input id="s" list="subs" required><datalist id="subs"></datalist></div>
-      <div><label for="e">זמן משוער (דקות)</label><input id="e" type="number" min="5" step="5" value="30" required></div>
+    <input id="n" required placeholder="שם המשימה" aria-label="שם המשימה" autocomplete="off">
+    <div class="two" style="grid-template-columns:2fr 1fr">
+      <input id="s" list="subs" required placeholder="מקצוע" aria-label="מקצוע" autocomplete="off"><datalist id="subs"></datalist>
+      <input id="e" type="number" min="5" step="5" value="30" required aria-label="דקות משוערות" placeholder="דקות">
     </div>
     <div class="hint" id="sug"></div>
-    <div><label>מועד הגשה</label>
-      <div class="strip" id="dc"></div><div class="hint" id="dh"></div>
-      <input id="d" type="hidden"><input id="tm" type="hidden">
-      <div class="two" style="margin-top:6px"><div><label for="th">שעה</label><div class="tp"><select id="th"></select><b>:</b><select id="tmm"></select></div></div><div><label for="dx">תאריך אחר</label><input id="dx" type="date"></div></div>
+    <div class="strip" id="dc"></div>
+    <div class="two">
+      <input id="tmx" inputmode="numeric" placeholder="שעה, למשל 08:30" aria-label="שעה" maxlength="5" autocomplete="off">
+      <div style="position:relative"><button type="button" class="chip" id="dmore">תאריך אחר</button><input id="dx" type="date" aria-label="תאריך אחר" class="vh"></div>
     </div>
+    <input id="d" type="hidden"><input id="tm" type="hidden">
+    <div class="hint" id="dh"></div>
     <button class="btn" type="submit">הוסף משימה</button>
   </form>
 </section>
@@ -167,6 +215,7 @@ dialog::backdrop{background:#0006;backdrop-filter:blur(3px)}
   </div>
 </details>
 
+<details class="setup" style="margin-top:16px"><summary class="ghost">היסטוריה</summary><div class="box" id="hl"></div></details>
 <details class="setup" style="margin-top:16px"><summary class="ghost">סיכום שבועי</summary>
   <div class="box" id="wk"></div>
   <div class="box">
@@ -177,6 +226,7 @@ dialog::backdrop{background:#0006;backdrop-filter:blur(3px)}
 </details>
 </main>
 <dialog id="dlg"><h2 style="margin:0 0 4px;font-size:20px;color:var(--ink)">כמה זמן זה לקח?</h2><div class="meta" id="dlt"></div><div class="chips" id="dlc" style="margin:14px 0"></div><div class="row"><input id="dli" type="number" min="1" style="flex:1" aria-label="דקות"><button class="btn" id="dlok" type="button">סיום</button><button class="btn alt" id="dlno" type="button">ביטול</button></div></dialog>
+<div id="snk" hidden><span id="snm"></span><button id="snu" type="button">בטל</button></div>
 <button id="fab" aria-label="משימה חדשה">+</button>
 
 <script>
@@ -204,13 +254,12 @@ function render(){
   const now=new Date();
   $('date').textContent=now.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
   const ls=sched[now.getDay()]||[];
-  const nt=todayNotes?todayNotes():[];
-  $('lessons').innerHTML=(typeof nt!=='undefined'&&nt.length?nt.map(x=>`<div class="meta" style="color:var(--r)">${esc(x)}</div>`).join(''):'')+(ls.length?ls.map(l=>`<div class="lesson"><time>${l[0]}</time><span>${l[1]}</span></div>`).join(''):`<div class="empty">${Object.keys(sched).length?'אין שיעורים היום. זמן טוב להתקדם במשימות.':'עדיין אין מערכת. אפשר להגדיר אותה למטה, ב״מערכת ואירועים״.'}</div>`);
-  const open=tasks.filter(t=>!t.done).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u);
+  $('lessons').innerHTML=lessonsHTML(now);
+  const open=tasks.filter(t=>!t.done&&!t.del).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u);
   const shown=clear?open.slice(0,1):open.slice(0,3);
   $('th').textContent=clear?'המשימה הבוערת ביותר':'שלוש המשימות הבוערות';
   document.body.classList.toggle('focus',clear);
-  $('sched').hidden=clear;renderEv();streakUI();renderWeek();renderChips();$('addsec').hidden=clear;$('fab').hidden=clear;
+  $('sched').hidden=clear;renderEv();streakUI();renderWeek();renderChips();renderHist();renderCal();$('addsec').hidden=clear;$('fab').hidden=clear;
   $('tasks').innerHTML=shown.length?shown.map(t=>`
     <div class="task"><div class="bar" style="background:${level(t.u)}"></div>
       <div style="flex:1"><b>${esc(t.name)}</b>
@@ -221,7 +270,7 @@ function render(){
           <button class="btn alt" data-a="del">מחק</button>
         </div></div></div>`).join(''):'<div class="empty">אין משימות פתוחות. הוסיפו משימה כדי להתחיל.</div>';
   if(!clear&&open.length>3)$('tasks').insertAdjacentHTML('beforeend',`<div class="meta">ועוד ${open.length-3} משימות פתוחות בהמשך.</div>`);
-  $('subs').innerHTML=[...new Set([...tasks.map(t=>t.sub),...Object.keys(hist)])].map(s=>`<option value="${esc(s)}">`).join('');
+  renderChips();
 }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function save(){store.set('so_tasks',tasks);store.set('so_hist',hist);pushSync()}
@@ -240,13 +289,13 @@ $('tasks').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;
   const id=+b.parentElement.dataset.id,t=tasks.find(x=>x.id===id);
   if(b.dataset.a==='focus'){pom={end:Date.now()+25*6e4,mode:'work',name:t.name};return pomUI()}
-  if(b.dataset.a==='del'){tasks=tasks.filter(x=>x.id!==id)}
+  if(b.dataset.a==='del'){t.del=Date.now();toast('המשימה נמחקה',()=>{delete t.del;save();render()})}
   else{
     const v=await askMin(t);
     if(v===null)return;
     const m=parseInt(v,10);
     if(m>0){(hist[t.sub]=hist[t.sub]||[]).push(m)}
-    t.done=true;t.act=m>0?m:t.est;t.doneAt=Date.now();
+    t.done=true;t.act=m>0?m:t.est;t.doneAt=Date.now();toast('המשימה הושלמה',()=>undoDone(t));
   }
   save();render();
 });
@@ -258,33 +307,42 @@ $('theme').onclick=()=>{
 };
 const th=store.get('so_theme',null);if(th)document.documentElement.dataset.theme=th;
 
-// Date & time entry: day strip + 24h selects
+// Date & time entry: responsive day strip + typed 24h time
 const pad=n=>String(n).padStart(2,'0');
 const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 function inDays(n){const d=new Date();d.setDate(d.getDate()+n);return d}
-let other=false;
-for(let i=0;i<21;i++){
-  const d=inDays(i),b=document.createElement('button');
-  b.type='button';b.className='dy';b.dataset.d=iso(d);
-  b.innerHTML=`<small>${i===0?'היום':i===1?'מחר':d.toLocaleDateString('he-IL',{weekday:'short'}).replace('יום ','')}</small><b>${d.getDate()}</b>`;
-  b.onclick=()=>{$('d').value=b.dataset.d;$('dh').textContent='';mark()};
-  $('dc').appendChild(b);
+let other=false,touched=false,dhmsg='';
+function buildStrip(){
+  const box=$('dc'),w=box.clientWidth||320,n=Math.max(4,Math.min(14,Math.floor(w/62)));
+  box.innerHTML='';
+  for(let i=0;i<n;i++){
+    const d=inDays(i),b=document.createElement('button');
+    b.type='button';b.className='dy';b.dataset.d=iso(d);
+    b.innerHTML=`<small>${i===0?'היום':i===1?'מחר':d.toLocaleDateString('he-IL',{weekday:'short'}).replace('יום ','')}</small><b>${d.getDate()}</b>`;
+    b.onclick=()=>{touched=true;dhmsg='';$('d').value=b.dataset.d;mark()};
+    box.appendChild(b);
+  }
+  mark();
 }
-$('th').innerHTML=Array.from({length:24},(_,i)=>`<option>${pad(i)}</option>`).join('');
-$('tmm').innerHTML=Array.from({length:12},(_,i)=>`<option>${pad(i*5)}</option>`).join('');
 function mark(){
-  const v=$('d').value,bs=[...$('dc').children];
+  const v=$('d').value,bs=[...$('dc').children],inStrip=bs.some(b=>b.dataset.d===v);
   bs.forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===v));
-  $('dx').value=bs.some(b=>b.dataset.d===v)?'':v;
-  const [h,m]=($('tm').value||'08:00').split(':');
-  $('th').value=h;
-  if(![...$('tmm').options].some(o=>o.value===m))$('tmm').add(new Option(m,m));
-  $('tmm').value=m;
+  $('dh').textContent=dhmsg||(v&&!inStrip?'נבחר: '+new Date(v+'T12:00').toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'}):'');
+  if(document.activeElement!==$('tmx'))$('tmx').value=$('tm').value;
 }
-$('th').onchange=$('tmm').onchange=()=>{$('tm').value=$('th').value+':'+$('tmm').value};
-$('dx').onchange=()=>{if($('dx').value){$('d').value=$('dx').value;$('dh').textContent='';mark()}};
-function setDef(){other=false;$('dh').textContent='';$('d').value=iso(inDays(1));$('tm').value='08:00';mark()}
+$('tmx').addEventListener('input',()=>{
+  let v=$('tmx').value.replace(/\D/g,'').slice(0,4);
+  if(v.length===3&&+v[0]>2)v='0'+v;
+  if(v.length>=3)v=v.slice(0,2)+':'+v.slice(2);
+  $('tmx').value=v;
+  if(/^([01]\d|2[0-3]):[0-5]\d$/.test(v)){touched=true;$('tm').value=v}
+});
+$('tmx').addEventListener('blur',()=>{$('tmx').value=$('tm').value});
+$('dmore').onclick=()=>{const x=$('dx');try{x.showPicker()}catch(e){x.classList.remove('vh');x.style.cssText='position:static;opacity:1;pointer-events:auto;margin-top:6px';x.focus()}};
+$('dx').onchange=()=>{if($('dx').value){touched=true;dhmsg='';$('d').value=$('dx').value;mark()}};
+function setDef(){other=false;touched=false;dhmsg='';$('d').value=iso(inDays(1));$('tm').value='08:00';buildStrip()}
 setDef();
+addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(buildStrip,200)});
 
 // ---- Stage 2: schedule + events ----
 const DAYS=['ראשון','שני','שלישי','רביעי','חמישי','שישי'];
@@ -371,7 +429,7 @@ function tick(){
   // morning summary (only within 3 hours of the set time)
   const [mh,mm]=cfg.morning.split(':').map(Number),mt=new Date(now);mt.setHours(mh,mm,0,0);
   if(now>=mt&&now-mt<3*36e5){
-    const ls=sched[now.getDay()]||[],top=tasks.filter(t=>!t.done).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u).slice(0,3);
+    const ls=sched[now.getDay()]||[],top=tasks.filter(t=>!t.done&&!t.del).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u).slice(0,3);
     const evT=evs.filter(e=>e.date===day).map(e=>e.title);
     fire('m'+day,'בוקר טוב'+(store.get('so_name','')?', '+store.get('so_name',''):''),[ls.length?`${ls.length} שיעורים היום`:'אין שיעורים היום',...evT,top.length?'בוער: '+top.map(t=>t.name).join(', '):''].filter(Boolean).join(' · '));
   }
@@ -380,7 +438,7 @@ function tick(){
     const diff=(t-now)/6e4;
     if(diff>0&&diff<=cfg.lesson)fire('l'+day+l[0],l[1],`מתחיל בעוד ${Math.ceil(diff)} דקות`);
   });
-  tasks.filter(t=>!t.done).forEach(t=>{
+  tasks.filter(t=>!t.done&&!t.del).forEach(t=>{
     const hrs=(new Date(t.due)-now)/36e5;
     if(hrs>0&&hrs<=cfg.dl+t.est/60)fire('d'+t.id,t.name,`ההגשה בעוד ${hrs<1?Math.round(hrs*60)+' דקות':Math.round(hrs)+' שעות'}. צפוי לקחת ${avg(t.sub)||t.est} דקות`);
   });
@@ -391,7 +449,7 @@ nstat();setInterval(tick,30000);tick();
 let days=store.get('so_days',{}),grades=store.get('so_gr',[]),pom=null;
 function streakUI(){const hr=new Date().getHours();{const nm=store.get('so_name','');$('hello').textContent=(hr<5?'לילה טוב':hr<12?'בוקר טוב':hr<18?'צהריים טובים':'ערב טוב')+(nm?', '+nm:'')}bannerUI();
   const now=new Date(),end=new Date(now);end.setHours(23,59,59,999);
-  const openDue=tasks.some(t=>!t.done&&new Date(t.due)<=end);
+  const openDue=tasks.some(t=>!t.done&&!t.del&&new Date(t.due)<=end);
   const doneToday=tasks.some(t=>t.done&&t.doneAt&&iso(new Date(t.doneAt))===iso(now));
   if(!openDue&&doneToday&&!days[iso(now)]){days[iso(now)]=1;store.set('so_days',days)}
   let n=0,d=new Date(now);if(!days[iso(d)])d.setDate(d.getDate()-1);
@@ -482,19 +540,15 @@ function nextLesson(sub){
   });
   return best;
 }
-let lastChips='';
 function renderChips(){
-  const s=new Set(tasks.map(t=>t.sub));
-  if(week&&mine)week.lessons.filter(l=>mine.includes(lk(l))).forEach(l=>s.add(l.subject));
-  const h=[...s].filter(Boolean).sort().map(x=>`<button type="button" class="chip" data-s="${esc(x)}">${esc(x)}</button>`).join('');
-  if(h===lastChips)return;lastChips=h;$('sc').innerHTML=h;
+  const set=new Set([...tasks.map(t=>t.sub),...Object.keys(hist)]);
+  if(week&&mine)week.lessons.filter(l=>mine.includes(lk(l))).forEach(l=>set.add(l.subject));
+  $('subs').innerHTML=[...set].filter(Boolean).sort().map(x=>`<option value="${esc(x)}">`).join('');
 }
-$('sc').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;
-  const sub=b.dataset.s;$('s').value=sub;$('s').dispatchEvent(new Event('input'));
-  const d=nextLesson(sub);
-  if(d){other=true;$('d').value=iso(d);$('tm').value=pad(d.getHours())+':'+pad(d.getMinutes());mark();$('dh').textContent='ההגשה הוגדרה לשיעור הבא: '+fmt(d)}
-  [...$('sc').children].forEach(c=>c.setAttribute('aria-pressed',c===b));
+$('s').addEventListener('change',()=>{
+  if(touched)return;
+  const d=nextLesson($('s').value.trim());
+  if(d){$('d').value=iso(d);$('tm').value=pad(d.getHours())+':'+pad(d.getMinutes());dhmsg='ההגשה לשיעור הבא: '+fmt(d);buildStrip()}
 });
 function bannerUI(){
   const first=!week&&!store.get('so_cls','');
@@ -504,7 +558,7 @@ function bannerUI(){
   else if(need)$('pbn').innerHTML='<div style="flex:1"><b>בחרו את השיעורים שלכם</b><div class="meta">פעם אחת, וזה נשמר. אפשר לשנות בהגדרות.</div></div><button class="btn" id="pgo">בחירה</button>';
 }
 $('pbn').addEventListener('click',e=>{if(e.target.id==='pgo'){const d=$('st');d.open=true;d.scrollIntoView({behavior:'smooth'});if(!week)$('cls').focus()}});
-$('fab').onclick=()=>{const a=$('addsec');a.classList.toggle('open');if(a.classList.contains('open'))$('n').focus()};
+$('fab').onclick=()=>{const a=$('addsec');a.classList.toggle('open');buildStrip();if(a.classList.contains('open'))$('n').focus()};
 $('cx').onclick=()=>$('addsec').classList.remove('open');
 function todayNotes(){
   if(!week)return [];
@@ -540,7 +594,7 @@ function pushSync(delay){
       await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         subscription:sub.toJSON(),cls:$('cls').value.trim(),mine:mine||[],
         cfg:{morning:cfg.morning,lesson:cfg.lesson,dl:cfg.dl,name:store.get('so_name','')},
-        tasks:tasks.filter(t=>!t.done).map(t=>({id:t.id,name:t.name,sub:t.sub,est:avg(t.sub)||t.est,due:t.due}))
+        tasks:tasks.filter(t=>!t.done&&!t.del).map(t=>({id:t.id,name:t.name,sub:t.sub,est:avg(t.sub)||t.est,due:t.due}))
       })});
     }catch(e){}
   },delay===0?0:1500);
@@ -630,6 +684,132 @@ syncUI();pullNow();
 $('nmn').value=store.get('so_name','');
 $('nmn').addEventListener('input',()=>{store.set('so_name',$('nmn').value.trim());render();pushSync()});
 if(cfg&&cfg.push)pushSync(0);
+
+// ---- undo / history ----
+let snt=null;
+function toast(msg,undo){
+  $('snm').textContent=msg;$('snk').hidden=false;
+  $('snu').onclick=()=>{undo();$('snk').hidden=true};
+  clearTimeout(snt);snt=setTimeout(()=>{$('snk').hidden=true},8000);
+}
+function undoDone(t){
+  if(t.act&&hist[t.sub]){const i=hist[t.sub].lastIndexOf(t.act);if(i>=0)hist[t.sub].splice(i,1)}
+  t.done=false;delete t.act;delete t.doneAt;save();render();
+}
+function renderHist(){
+  const lim=Date.now()-14*864e5;
+  const row=(t,label,btn,a)=>`<div class="ev"><span>${esc(t.name)} <span class="meta">${esc(t.sub)} · ${label}</span></span><button class="btn alt" data-a="${a}" data-id="${t.id}" type="button">${btn}</button></div>`;
+  const done=tasks.filter(t=>t.done&&t.doneAt>=lim).sort((a,b)=>b.doneAt-a.doneAt).slice(0,10);
+  const del=tasks.filter(t=>t.del&&!t.done&&t.del>=lim).sort((a,b)=>b.del-a.del).slice(0,10);
+  $('hl').innerHTML=done.length||del.length?done.map(t=>row(t,'הושלמה','בטל סיום','u')).join('')+del.map(t=>row(t,'נמחקה','שחזר','r')).join(''):'<div class="empty">אין משימות שהושלמו או נמחקו ב-14 הימים האחרונים.</div>';
+}
+$('hl').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const t=tasks.find(x=>x.id===+b.dataset.id);if(!t)return;
+  if(b.dataset.a==='u')undoDone(t);else{delete t.del;save();render()}
+});
+// ---- today's lessons with cancellations, changes and breaks ----
+const toMin=x=>{const [h,m]=String(x).split(':').map(Number);return h*60+m};
+function dayLessons(wd,useNotes=true){
+  if(!week||!mine)return (sched[wd]||[]).map(l=>({start:l[0],end:'',subject:l[1],status:''}));
+  const ms=new Set(mine),times={};
+  week.lessons.forEach(l=>{times[l.n]=[l.start,l.end]});
+  const out=week.lessons.filter(l=>l.day===wd&&ms.has(lk(l))).map(l=>({...l,status:'',note:''}));
+  const toks=[...ms].flatMap(k=>k.split('|')).filter(x=>x.length>2);
+  week.notes.filter(n=>useNotes&&n.day===wd&&toks.some(k=>n.text.includes(k))).forEach(n=>{
+    const t=n.text,tm=times[n.n]||['',''],slot=out.filter(l=>l.n===n.n),m=t.match(/^ביטול\s+(.+?)(?:,\s*(.+))?$/);
+    if(m){
+      const hit=slot.find(l=>t.includes(l.subject)||(l.teacher&&t.includes(l.teacher)));
+      if(hit){hit.status='cancel'}
+      else out.push({n:n.n,start:tm[0],end:tm[1],subject:m[1],teacher:m[2]||'',status:'cancel'});
+      return;
+    }
+    const note=t.replace('<-','←');
+    if(slot.length)slot.forEach(l=>{l.status='change';l.note=note});
+    else out.push({n:n.n,start:tm[0],end:tm[1],subject:'שינוי',status:'change',note});
+  });
+  return out.filter(l=>l.start).sort((a,b)=>toMin(a.start)-toMin(b.start));
+}
+function lessonsHTML(now){
+  const ls=dayLessons(now.getDay());
+  if(!ls.length)return `<div class="empty">${Object.keys(sched).length||week?'אין שיעורים היום. זמן טוב להתקדם במשימות.':'עדיין אין מערכת. אפשר להגדיר אותה למטה, ב״מערכת ואירועים״.'}</div>`;
+  const items=ls.map(l=>({t:toMin(l.start),k:1,l}));
+  const act=ls.filter(l=>l.status!=='cancel'&&l.end);
+  for(let i=1;i<act.length;i++){
+    const gap=toMin(act[i].start)-toMin(act[i-1].end);
+    if(gap>=20)items.push({t:toMin(act[i-1].end),k:0,gap:{a:act[i-1].end,b:act[i].start,d:gap}});
+  }
+  return items.sort((x,y)=>x.t-y.t||x.k-y.k).map(it=>{
+    if(it.gap)return `<div class="brk">${it.gap.d<=30?'הפסקה':'חלון'} ${it.gap.a}–${it.gap.b} · ${it.gap.d} דק׳</div>`;
+    const l=it.l,c=l.status==='cancel';
+    return `<div class="lesson${c?' off':''}"><time>${l.start}${l.end?`<small>${l.end}</small>`:''}</time><span>${c?`<s>${esc(l.subject)}</s>`:esc(l.subject)}${l.status==='change'?` <span class="arr">←</span> ${esc(l.note)}`:''}</span>${c?'<em class="tag">בוטל</em>':''}</div>`;
+  }).join('');
+}
+
+// ---- Calendar: day / 3 days / week / month ----
+let calV=store.get('so_calv','3d'),calD=new Date();calD.setHours(0,0,0,0);
+const calT={day:'יום','3d':'3 ימים',week:'שבוע',month:'חודש'};
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+function itemsFor(d){
+  const wd=d.getDay(),key=iso(d);
+  const cur=!!(week&&week.days&&week.days[wd]&&week.days[wd].date===pad(d.getDate())+'.'+pad(d.getMonth()+1));
+  const les=dayLessons(wd,cur).map(l=>({...l,s:toMin(l.start),e:l.end?toMin(l.end):toMin(l.start)+45}));
+  const ev=evs.filter(e=>e.date===key);
+  const due=tasks.filter(t=>!t.done&&!t.del&&t.due.slice(0,10)===key).map(t=>({...t,s:toMin(t.due.slice(11,16)),u:urgency(t)}));
+  return {les,ev,due};
+}
+function gridHTML(days){
+  const data=days.map(itemsFor);
+  let lo=420,hi=960;
+  data.forEach(x=>{x.les.forEach(l=>{lo=Math.min(lo,l.s);hi=Math.max(hi,l.e)});x.due.forEach(t=>{lo=Math.min(lo,t.s);hi=Math.max(hi,t.s+30)})});
+  lo=Math.floor(Math.max(lo,360)/60)*60;hi=Math.ceil(Math.min(hi,1380)/60)*60;
+  const H=52,px=m=>(m-lo)/60*H,tot=px(hi),now=new Date(),nm=now.getHours()*60+now.getMinutes(),hrs=(hi-lo)/60;
+  const gut=`<div class="gut" style="height:${tot}px">${Array.from({length:hrs+1},(_,i)=>`<span style="top:${i*H}px">${pad(lo/60+i)}:00</span>`).join('')}</div>`;
+  const heads=days.map(d=>`<button class="ch${iso(d)===iso(now)?' td':''}" data-d="${iso(d)}"><small>${d.toLocaleDateString('he-IL',{weekday:'short'}).replace('יום ','')}</small><b>${d.getDate()}</b></button>`).join('');
+  const anyEv=data.some(x=>x.ev.length);
+  const allday=anyEv?`<div class="ghd"><span></span>${data.map(x=>`<div class="ad">${x.ev.map(e=>`<span class="evc">${esc(e.title)}</span>`).join('')}</div>`).join('')}</div>`:'';
+  const cols=days.map((d,i)=>{
+    const x=data[i];
+    const lines=Array.from({length:hrs},(_,k)=>`<i style="top:${k*H}px"></i>`).join('');
+    const b=x.les.map(l=>`<div class="blk${l.status==='cancel'?' off':''}${l.status==='change'?' chg':''}" style="top:${px(l.s)}px;height:${Math.max(18,px(l.e)-px(l.s)-2)}px"><b>${l.status==='cancel'?`<s>${esc(l.subject)}</s>`:esc(l.subject)}</b>${l.status==='change'?`<span>← ${esc(l.note)}</span>`:l.status==='cancel'?'<span>בוטל</span>':l.room?`<span>${esc(l.room)}</span>`:''}</div>`).join('');
+    const dd=x.due.map(t=>`<div class="dd" style="top:${px(t.s)}px;background:${level(t.u)}">${esc(t.name)}</div>`).join('');
+    const nl=iso(d)===iso(now)&&nm>=lo&&nm<=hi?`<div class="nl" style="top:${px(nm)}px"></div>`:'';
+    return `<div class="col" style="height:${tot}px">${lines}${b}${dd}${nl}</div>`;
+  }).join('');
+  return `<div class="cg" style="--n:${days.length}"><div class="ghd"><span></span>${heads}</div>${allday}<div class="ghd gbd">${gut}${cols}</div></div>`;
+}
+function monthHTML(d){
+  const first=new Date(d.getFullYear(),d.getMonth(),1),start=addD(first,-first.getDay());
+  const cells=Array.from({length:42},(_,i)=>addD(start,i));
+  const n=cells.slice(35).every(c=>c.getMonth()!==d.getMonth())?35:42,today=iso(new Date());
+  return `<div class="mh">${['א','ב','ג','ד','ה','ו','ש'].map(x=>`<span>${x}</span>`).join('')}</div><div class="mg">`+cells.slice(0,n).map(c=>{
+    const it=itemsFor(c),cancel=it.les.some(l=>l.status==='cancel');
+    const dots=[...it.due.slice(0,3).map(t=>`<i style="background:${level(t.u)}"></i>`),...(it.ev.length?['<i style="background:var(--ac)"></i>']:[]),...(cancel?['<i style="background:var(--r)"></i>']:[])].join('');
+    return `<button class="mc${c.getMonth()!==d.getMonth()?' dim':''}${iso(c)===today?' td':''}" data-d="${iso(c)}"><b>${c.getDate()}</b><span class="dots">${dots}</span></button>`;
+  }).join('')+`</div><div class="meta" style="margin-top:10px">הגשות בצבע הדחיפות · אירועים בירוק מעושן · ביטולים באדום</div>`;
+}
+function renderCal(){
+  if(!document.body.classList.contains('calmode'))return;
+  const v=calV,d=new Date(calD);let days=[],title='';
+  $('cseg').innerHTML=Object.keys(calT).map(k=>`<button class="chip" data-v="${k}" aria-pressed="${k===v}">${calT[k]}</button>`).join('');
+  if(v==='day'){days=[d];title=d.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'})}
+  if(v==='3d')days=[0,1,2].map(i=>addD(d,i));
+  if(v==='week'){const st=addD(d,-d.getDay());days=[0,1,2,3,4,5,6].map(i=>addD(st,i))}
+  if(v==='3d'||v==='week'){const a=days[0],z=days[days.length-1];title=a.getMonth()===z.getMonth()?`${a.getDate()}–${z.getDate()} ${z.toLocaleDateString('he-IL',{month:'long'})}`:`${a.getDate()} ${a.toLocaleDateString('he-IL',{month:'short'})} – ${z.getDate()} ${z.toLocaleDateString('he-IL',{month:'short'})}`}
+  if(v==='month')title=d.toLocaleDateString('he-IL',{month:'long',year:'numeric'});
+  $('cti').textContent=title;
+  $('cbody').innerHTML=v==='month'?monthHTML(d):gridHTML(days);
+}
+function navCal(dir){
+  if(calV==='month')calD=new Date(calD.getFullYear(),calD.getMonth()+dir,1);
+  else calD=addD(calD,dir*({day:1,'3d':3,week:7}[calV]));
+  renderCal();
+}
+$('cseg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;calV=b.dataset.v;store.set('so_calv',calV);renderCal()});
+$('cbody').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(!b)return;calV='day';calD=new Date(b.dataset.d+'T00:00');renderCal()});
+$('cp').onclick=()=>navCal(-1);$('cnx').onclick=()=>navCal(1);
+$('ctd').onclick=()=>{calD=new Date();calD.setHours(0,0,0,0);renderCal()};
+$('calb').onclick=()=>{const on=document.body.classList.toggle('calmode');$('calb').textContent=on?'חזרה':'יומן';renderCal();scrollTo(0,0)};
 render();setInterval(render,60000);
 </script>
 <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));</script>

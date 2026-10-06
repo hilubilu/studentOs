@@ -21,7 +21,7 @@ function israelNow() {
   };
 }
 
-function eventsFor(s, week, T) {
+function eventsFor(s, week, T, fired) {
   const cfg = Object.assign({ morning: '07:30', lesson: 10, dl: 24 }, s.cfg || {});
   const mine = new Set(s.mine || []);
   const out = [];
@@ -56,7 +56,16 @@ function eventsFor(s, week, T) {
   // school changes relevant to this student
   const toks = [...mine].flatMap(k => k.split('|')).filter(x => x.length > 2);
   const notes = (week ? week.notes : []).filter(n => toks.some(k => n.text.includes(k) || k.includes(n.text)));
-  const noteEvents = notes.map(n => ({ key: `n${n.day}|${n.n}|${n.text}`, title: 'שינוי במערכת', body: n.text, note: true }));
+  const noteEvents = notes.map(n => ({ key: `n${n.day}|${n.n}|${n.text}`, title: 'שינוי במערכת', body: n.text, note: true, day: n.day }));
+  // second alert: 30 min before the school day starts, for changes announced on an earlier day
+  const startToday = (Math.floor(Date.now() / 60000) - T.min) * 60000;
+  const dayStart = todays.length ? Math.min(...todays.map(l => { const [h, m] = l.start.split(':').map(Number); return h * 60 + m; })) : 8 * 60;
+  const untilStart = dayStart - T.min;
+  if (untilStart > 0 && untilStart <= 30) {
+    noteEvents
+      .filter(e => e.day === T.wd && fired && fired[e.key] && fired[e.key] < startToday)
+      .forEach(e => out.push({ key: 'r' + e.key + T.day, title: 'תזכורת: שינוי במערכת להיום', body: e.body }));
+  }
   return { out, noteEvents };
 }
 
@@ -74,7 +83,7 @@ export default async function handler(req, res) {
 
     for (const s of subs) {
       if (!(s.cls in weeks)) weeks[s.cls] = await fetchWeek(s.cls).catch(() => null);
-      const { out, noteEvents } = eventsFor(s, weeks[s.cls], T);
+      const { out, noteEvents } = eventsFor(s, weeks[s.cls], T, s.fired || {});
       let fired = s.fired || {};
       const cutoff = Date.now() - 6 * 864e5;
       Object.keys(fired).forEach(k => { if (fired[k] < cutoff) delete fired[k]; });
