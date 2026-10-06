@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#6f9c86">
-<link rel="apple-touch-icon" href="/icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>StudentOS</title>
@@ -124,6 +119,23 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
 #mp{background:var(--card);border-radius:16px;padding:10px;display:grid;gap:8px}
 .ev.edit{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0}
 .ev .x{font-size:18px;padding:2px 6px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+input[type=date]{min-width:0;-webkit-appearance:none;appearance:none;height:46px;text-align:start}
+.evh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.panel{display:grid;gap:10px;background:var(--bg);border-radius:14px;padding:12px}
+.mo{color:var(--mute);font-size:13px;margin:16px 0 2px}
+.evr{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 0;text-align:start;cursor:pointer;font:inherit;color:inherit}
+.evr.edit{display:grid;gap:8px;cursor:default;padding:12px 0}
+.bd{flex:none;width:46px;height:46px;border-radius:12px;background:color-mix(in srgb,var(--ac) 18%,var(--card));display:grid;place-items:center;align-content:center;line-height:1.1}
+.bd b{font-weight:500;font-size:17px}.bd small{font-size:11px;color:var(--mute)}
+.et{flex:1;min-width:0}.et small{display:block;color:var(--mute);font-size:12px}
+.pastb{margin:14px 0 4px}
+.sh{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;font:inherit;font-weight:500;font-size:16px;color:var(--ink);cursor:pointer;padding:6px 0}
+.sh span:last-child{color:var(--mute);transition:transform .2s}.sh.on span:last-child{transform:rotate(180deg)}
+.sbody{display:grid;gap:10px;margin-top:10px}
+.plan{color:var(--ac)}.warn{color:var(--r)}
+.blk.pl{background:transparent;border:1px dashed var(--ac);border-inline-start:3px solid var(--ac)}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
@@ -191,12 +203,19 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
     <div class="hint" id="sm"></div>
   </div>
   <div class="box">
-    <div><label for="pdf">אירועי השנה (PDF)</label><input id="pdf" type="file" accept="application/pdf"></div>
-    <textarea id="pt" rows="5" placeholder="או הדביקו כאן טקסט, שורה לכל אירוע:&#10;12.10 חופש סוכות&#10;3/11 מבחן במתמטיקה"></textarea>
-    <button class="btn" type="button" id="pb">הוסף אירועים</button>
-    <div class="hint" id="pm"></div>
-    <div class="two"><input id="evn" placeholder="אירוע חדש" aria-label="שם האירוע" autocomplete="off"><input id="evd" type="date" aria-label="תאריך האירוע"></div>
-    <button class="btn alt" type="button" id="eva">הוסף אירוע</button>
+    <div class="evh"><span class="meta" id="evc"></span><span style="flex:1"></span><button class="chip" id="evadd" type="button">+ אירוע</button><button class="chip" id="evimp" type="button">ייבוא מ-PDF</button></div>
+    <div class="panel" id="evnew" hidden>
+      <input id="evn" placeholder="שם האירוע" aria-label="שם האירוע" autocomplete="off">
+      <input id="evd" type="date" aria-label="תאריך האירוע">
+      <div class="hint" id="evm"></div>
+      <div class="row" style="margin:0"><button class="btn" type="button" id="eva">הוסף</button><button class="btn alt" type="button" id="evcancel">ביטול</button></div>
+    </div>
+    <div class="panel" id="evimpp" hidden>
+      <input id="pdf" type="file" accept="application/pdf" aria-label="קובץ PDF">
+      <textarea id="pt" rows="4" placeholder="או הדביקו טקסט, שורה לכל אירוע:&#10;12.10 חופש סוכות"></textarea>
+      <button class="btn" type="button" id="pb">הוסף אירועים</button>
+      <div class="hint" id="pm"></div>
+    </div>
     <div id="evl"></div>
   </div>
   <div class="box">
@@ -208,8 +227,7 @@ body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body
     <div class="hint" id="ns"></div>
   </div>
   <div class="box">
-    <b>סנכרון בין מכשירים</b>
-    <div id="sc_off" style="display:grid;gap:10px">
+        <div id="sc_off" style="display:grid;gap:10px">
       <button class="btn" type="button" id="sc1">צור קוד סנכרון</button>
       <div><label for="sci">כבר יש לכם קוד ממכשיר אחר?</label><input id="sci" placeholder="xxxx-xxxx-xxxx-…" autocomplete="off" style="direction:ltr"></div>
       <button class="btn alt" type="button" id="sc2">חבר מכשיר זה</button>
@@ -258,7 +276,7 @@ function level(u){return u>=0.6?'var(--r)':u>=0.25?'var(--y)':'var(--g)'}
 function avg(sub){const a=hist[sub];if(!a||!a.length)return null;const r=a.slice(-5);return Math.round(r.reduce((x,y)=>x+y,0)/r.length)}
 function fmt(d){return new Date(d).toLocaleString('he-IL',{weekday:'short',day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',hour12:false})}
 
-function render(){
+function render(){plan=computePlan();
   const now=new Date();
   $('date').textContent=now.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
   const ls=sched[now.getDay()]||[];
@@ -271,7 +289,7 @@ function render(){
   $('tasks').innerHTML=shown.length?shown.map(t=>`
     <div class="task"><div class="bar" style="background:${level(t.u)}"></div>
       <div style="flex:1"><b>${esc(t.name)}</b>
-        <div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · כ-${avg(t.sub)||t.est} דק׳</div>
+        <div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · כ-${avg(t.sub)||t.est} דק׳</div>${planLine(t.id)}
         <div class="row" data-id="${t.id}">
           <button class="btn" data-a="done">סיימתי</button>
           <button class="btn alt" data-a="edit">ערוך</button>
@@ -579,7 +597,7 @@ function bannerUI(){
   if(first)$('pbn').innerHTML='<div style="flex:1"><b>ברוכים הבאים</b><div class="meta">בחרו כיתה כדי למשוך את המערכת מבית הספר.</div></div><button class="btn" id="pgo">התחלה</button>';
   else if(need)$('pbn').innerHTML='<div style="flex:1"><b>בחרו את השיעורים שלכם</b><div class="meta">פעם אחת, וזה נשמר. אפשר לשנות בהגדרות.</div></div><button class="btn" id="pgo">בחירה</button>';
 }
-$('pbn').addEventListener('click',e=>{if(e.target.id==='pgo'){const d=$('st');d.open=true;d.scrollIntoView({behavior:'smooth'});if(!week)$('cls').focus()}});
+$('pbn').addEventListener('click',e=>{if(e.target.id==='pgo'){const d=$('st');d.open=true;const h=d.querySelector('.sh');if(h&&h.nextElementSibling.hidden)h.click();d.scrollIntoView({behavior:'smooth'});if(!week)$('cls').focus()}});
 $('fab').onclick=()=>{const a=$('addsec');if(a.classList.contains('open')){closeSheet();return}if(editId)cancelEdit();a.classList.add('open');buildStrip();$('n').focus()};
 $('cx').onclick=closeSheet;
 function todayNotes(){
@@ -778,12 +796,13 @@ function itemsFor(d){
   const les=dayLessons(wd,cur).map(l=>({...l,s:toMin(l.start),e:l.end?toMin(l.end):toMin(l.start)+45}));
   const ev=evs.filter(e=>e.date===key);
   const due=tasks.filter(t=>!t.done&&!t.del&&t.due.slice(0,10)===key).map(t=>({...t,s:toMin(t.due.slice(11,16)),u:urgency(t)}));
-  return {les,ev,due};
+  const pl=plan.filter(p=>!p.unfit&&iso(new Date(p.start))===key).map(p=>{const a=new Date(p.start),b=new Date(p.end);return {...p,s:a.getHours()*60+a.getMinutes(),e:b.getHours()*60+b.getMinutes()}});
+  return {les,ev,due,pl};
 }
 function gridHTML(days){
   const data=days.map(itemsFor);
   let lo=420,hi=960;
-  data.forEach(x=>{x.les.forEach(l=>{lo=Math.min(lo,l.s);hi=Math.max(hi,l.e)});x.due.forEach(t=>{lo=Math.min(lo,t.s);hi=Math.max(hi,t.s+30)})});
+  data.forEach(x=>{x.les.forEach(l=>{lo=Math.min(lo,l.s);hi=Math.max(hi,l.e)});x.due.forEach(t=>{lo=Math.min(lo,t.s);hi=Math.max(hi,t.s+30)});x.pl.forEach(p=>{lo=Math.min(lo,p.s);hi=Math.max(hi,p.e)})});
   lo=Math.floor(Math.max(lo,360)/60)*60;hi=Math.ceil(Math.min(hi,1380)/60)*60;
   const H=52,px=m=>(m-lo)/60*H,tot=px(hi),now=new Date(),nm=now.getHours()*60+now.getMinutes(),hrs=(hi-lo)/60;
   const gut=`<div class="gut" style="height:${tot}px">${Array.from({length:hrs+1},(_,i)=>`<span style="top:${i*H}px">${pad(lo/60+i)}:00</span>`).join('')}</div>`;
@@ -795,8 +814,9 @@ function gridHTML(days){
     const lines=Array.from({length:hrs},(_,k)=>`<i style="top:${k*H}px"></i>`).join('');
     const b=x.les.map(l=>`<div class="blk${l.status==='cancel'?' off':''}${l.status==='change'?' chg':''}" style="top:${px(l.s)}px;height:${Math.max(18,px(l.e)-px(l.s)-2)}px"><b>${l.status==='cancel'?`<s>${esc(l.subject)}</s>`:esc(l.subject)}</b>${l.status==='change'?`<span>← ${esc(l.note)}</span>`:l.status==='cancel'?'<span>בוטל</span>':l.room?`<span>${esc(l.room)}</span>`:''}</div>`).join('');
     const dd=x.due.map(t=>`<div class="dd" style="top:${px(t.s)}px;background:${level(t.u)}">${esc(t.name)}</div>`).join('');
+    const pb=x.pl.map(p=>`<div class="blk pl" style="top:${px(p.s)}px;height:${Math.max(18,px(p.e)-px(p.s)-2)}px"><b>${esc(p.name)}</b><span>מומלץ · ${p.mins} דק׳</span></div>`).join('');
     const nl=iso(d)===iso(now)&&nm>=lo&&nm<=hi?`<div class="nl" style="top:${px(nm)}px"></div>`:'';
-    return `<div class="col" style="height:${tot}px">${lines}${b}${dd}${nl}</div>`;
+    return `<div class="col" style="height:${tot}px">${lines}${b}${pb}${dd}${nl}</div>`;
   }).join('');
   return `<div class="cg" style="--n:${days.length}"><div class="ghd"><span></span>${heads}</div>${allday}<div class="ghd gbd">${gut}${cols}</div></div>`;
 }
@@ -849,14 +869,22 @@ function cancelEdit(){
 }
 function closeSheet(){$('addsec').classList.remove('open');if(editId)cancelEdit()}
 
-// ---- events: add / edit / delete ----
-let evEdit=null;
-const evDate=d=>d.split('-').reverse().join('.');
+// ---- events: month-grouped list, tap a row to edit ----
+let evEdit=null,evPast=false;
 function evsHTML(){
-  return evs.map((e,i)=>evEdit===i
-    ?`<div class="ev edit"><input data-f="t" value="${esc(e.title)}" aria-label="שם האירוע"><input data-f="d" type="date" value="${e.date}" aria-label="תאריך"><button class="btn" type="button" data-a="save" data-i="${i}">שמור</button><button class="btn alt" type="button" data-a="cancel">ביטול</button></div>`
-    :`<div class="ev"><span>${esc(e.title)} <span class="meta">${evDate(e.date)}</span></span><span><button class="x" data-a="edit" data-i="${i}" aria-label="ערוך">✎</button><button class="x" data-a="del" data-i="${i}" aria-label="מחק">✕</button></span></div>`
-  ).join('');
+  const t0=iso(new Date()),up=[],past=[];
+  evs.forEach((e,i)=>(e.date>=t0?up:past).push([e,i]));
+  const row=([e,i])=>{
+    const d=new Date(e.date+'T12:00');
+    if(evEdit===i)return `<div class="evr edit"><input data-f="t" value="${esc(e.title)}" aria-label="שם האירוע"><input data-f="d" type="date" value="${e.date}" aria-label="תאריך"><div class="row" style="margin:0"><button class="btn" type="button" data-a="save" data-i="${i}">שמור</button><button class="btn alt" type="button" data-a="cancel">ביטול</button><button class="btn alt" type="button" data-a="del" data-i="${i}">מחק</button></div></div>`;
+    return `<button type="button" class="evr" data-a="edit" data-i="${i}"><span class="bd"><b>${d.getDate()}</b><small>${d.toLocaleDateString('he-IL',{month:'short'})}</small></span><span class="et">${esc(e.title)}<small>${d.toLocaleDateString('he-IL',{weekday:'long'})}</small></span></button>`;
+  };
+  let html='',cur='';
+  up.forEach(x=>{const m=new Date(x[0].date+'T12:00').toLocaleDateString('he-IL',{month:'long',year:'numeric'});if(m!==cur){cur=m;html+=`<div class="mo">${m}</div>`}html+=row(x)});
+  if(!up.length)html='<div class="empty">אין אירועים קרובים.</div>';
+  if(past.length)html+=`<button type="button" class="chip pastb" data-a="past">${evPast?'הסתר':'הצג'} אירועים שעברו (${past.length})</button>`+(evPast?past.slice().reverse().map(row).join(''):'');
+  $('evc').textContent=up.length?`${up.length} קרובים`:'';
+  return html;
 }
 function saveEv(){evs.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);store.set('so_ev',evs);evEdit=null;render()}
 $('evl').addEventListener('click',e=>{
@@ -864,8 +892,9 @@ $('evl').addEventListener('click',e=>{
   const i=+b.dataset.i,a=b.dataset.a;
   if(a==='edit'){evEdit=i;renderEv()}
   else if(a==='cancel'){evEdit=null;renderEv()}
+  else if(a==='past'){evPast=!evPast;renderEv()}
   else if(a==='save'){
-    const row=b.closest('.ev'),t=row.querySelector('[data-f="t"]').value.trim(),d=row.querySelector('[data-f="d"]').value;
+    const row=b.closest('.evr'),t=row.querySelector('[data-f="t"]').value.trim(),d=row.querySelector('[data-f="d"]').value;
     if(!t||!d)return;
     evs[i]={title:t,date:d};saveEv();
   }else if(a==='del'){
@@ -873,13 +902,73 @@ $('evl').addEventListener('click',e=>{
     toast('האירוע נמחק',()=>{evs.push(ev);saveEv()});
   }
 });
+$('evadd').onclick=()=>{const open=!$('evnew').hidden;$('evnew').hidden=open;$('evimpp').hidden=true;if(!open){$('evd').value=$('evd').value||iso(new Date());$('evm').textContent='';$('evn').focus()}};
+$('evimp').onclick=()=>{$('evimpp').hidden=!$('evimpp').hidden;$('evnew').hidden=true};
+$('evcancel').onclick=()=>{$('evnew').hidden=true};
 $('eva').onclick=()=>{
   const t=$('evn').value.trim(),d=$('evd').value;
-  if(!t||!d){$('pm').textContent='כתבו שם ובחרו תאריך.';return}
-  evs.push({title:t,date:d});saveEv();$('evn').value='';$('evd').value='';$('pm').textContent='האירוע נוסף';
+  if(!t||!d){$('evm').textContent='כתבו שם ובחרו תאריך.';return}
+  evs.push({title:t,date:d});saveEv();$('evn').value='';$('evnew').hidden=true;
 };
+// ---- collapsible settings sections ----
+['כיתה ומערכת','אירועי השנה','התראות','סנכרון בין מכשירים'].forEach((name,i)=>{
+  const bx=[...$('st').children].filter(x=>x.classList.contains('box'))[i];if(!bx)return;
+  const body=document.createElement('div');body.className='sbody';body.hidden=true;
+  while(bx.firstChild)body.appendChild(bx.firstChild);
+  const h=document.createElement('button');h.type='button';h.className='sh';h.innerHTML=`<span>${name}</span><span>⌄</span>`;
+  h.onclick=()=>{body.hidden=!body.hidden;h.classList.toggle('on',!body.hidden)};
+  bx.append(h,body);
+});
+// ---- optimal time planner ----
+let plan=[];
+function freeSlots(d){
+  const wd=d.getDay();if(wd===6)return [];
+  const act=itemsFor(d).les.filter(l=>l.status!=='cancel').sort((a,b)=>a.s-b.s),sl=[];
+  if(!act.length){if(wd===5)sl.push([600,780]);else sl.push([600,810],[960,1230]);return sl}
+  for(let i=1;i<act.length;i++){const g=act[i].s-act[i-1].e;if(g>=45)sl.push([act[i-1].e+5,act[i].s-5])}
+  if(wd!==5)sl.push([Math.max(act[act.length-1].e+45,840),1290]);
+  return sl;
+}
+function computePlan(){
+  const now=Date.now();
+  const open=tasks.filter(t=>!t.done&&!t.del).map(t=>({t,due:Date.parse(t.due),need:avg(t.sub)||t.est})).filter(x=>x.due>now).sort((a,b)=>a.due-b.due);
+  const days=Array.from({length:10},(_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+i);return {base:d.getTime(),slots:freeSlots(d).map(x=>[...x]),used:0}});
+  const nd=new Date(now),nm=Math.ceil((nd.getHours()*60+nd.getMinutes()+10)/15)*15;
+  days[0].slots=days[0].slots.map(([a,b])=>[Math.max(a,nm),b]).filter(([a,b])=>b-a>=20);
+  const out=[];
+  open.forEach(({t,due,need})=>{
+    for(const capped of [true,false]){
+      let rem=need;const got=[],snap=days.map(d=>({slots:d.slots.map(x=>[...x]),used:d.used}));
+      for(const dy of days){
+        if(rem<=0||dy.base>due)break;
+        for(const sl of dy.slots){
+          while(rem>0&&sl[1]-sl[0]>=20){
+            if(capped&&dy.used>=150)break;
+            const st=dy.base+sl[0]*6e4;if(st>=due)break;
+            let len=Math.min(60,rem,sl[1]-sl[0]);if(capped)len=Math.min(len,150-dy.used);
+            if(len<20&&len<rem)break;
+            if(st+len*6e4>due)break;
+            got.push({id:t.id,name:t.name,sub:t.sub,start:st,end:st+len*6e4,mins:len});
+            sl[0]+=len+10;dy.used+=len;rem-=len;
+          }
+        }
+      }
+      if(rem<=0){out.push(...got);break}
+      days.forEach((d,i)=>{d.slots=snap[i].slots;d.used=snap[i].used});
+      if(!capped)out.push({id:t.id,unfit:true});
+    }
+  });
+  return out;
+}
+function planLine(id){
+  const ps=plan.filter(p=>p.id===id);if(!ps.length)return '';
+  if(ps[0].unfit)return '<div class="meta warn">אין מספיק זמן פנוי עד ההגשה. כדאי להתחיל כבר עכשיו</div>';
+  const a=new Date(ps[0].start),t0=new Date();t0.setHours(0,0,0,0);
+  const dd=Math.round((new Date(a).setHours(0,0,0,0)-t0)/864e5);
+  const day=dd===0?'היום':dd===1?'מחר':a.toLocaleDateString('he-IL',{weekday:'long'});
+  return `<div class="meta plan">מומלץ: ${day} ${pad(a.getHours())}:${pad(a.getMinutes())} · ${ps[0].mins} דק׳${ps.length>1?` (ועוד ${ps.length-1})`:''}</div>`;
+}
 render();setInterval(render,60000);
 </script>
-<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));</script>
 </body>
 </html>
