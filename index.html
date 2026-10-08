@@ -323,7 +323,6 @@ function level(u){return u>=0.6?'var(--r)':u>=0.25?'var(--y)':'var(--g)'}
 function avg(sub){const a=hist[sub];if(!a||!a.length)return null;const r=a.slice(-5);return Math.round(r.reduce((x,y)=>x+y,0)/r.length)}
 function fmt(d){return new Date(d).toLocaleString('he-IL',{weekday:'short',day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit',hour12:false})}
 
-var showAll=false;
 function render(){
   buildOff();
   const now=new Date();
@@ -332,9 +331,8 @@ function render(){
   fbUI();
   const vw=viewDay(now);$('lessons').innerHTML=lessonsHTML(vw.d);eveUI(vw,now);
   const open=tasks.filter(t=>!t.done&&!t.del).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u);
-  if(open.length<=3)showAll=false;
-  const shown=clear?open.slice(0,1):showAll?open:open.slice(0,3);
-  $('th').textContent=clear?'המשימה הבוערת ביותר':showAll?`כל המשימות הפתוחות (${open.length})`:'שלוש המשימות הבוערות';
+  const shown=clear?open.slice(0,1):open.slice(0,3);
+  $('th').textContent=clear?'המשימה הבוערת ביותר':'שלוש המשימות הבוערות';
   document.body.classList.toggle('focus',clear);
   $('sched').hidden=clear;renderEv();streakUI();renderWeek();renderChips();renderHist();renderCal();$('addsec').hidden=clear;$('fab').hidden=clear;
   $('tasks').innerHTML=shown.length?shown.map(t=>`
@@ -347,7 +345,7 @@ function render(){
           <button class="btn alt" data-a="focus">פוקוס 25 דק׳</button>
           <button class="btn alt" data-a="del">מחק</button>
         </div></div></div>`).join(''):'<div class="empty">אין משימות פתוחות. הוסיפו משימה כדי להתחיל.</div>';
-  if(!clear&&open.length>3)$('tasks').insertAdjacentHTML('beforeend',`<button class="btn alt" type="button" id="tgall" style="margin-top:6px">${showAll?'הצג רק את הבוערות':`הצג את כל המשימות (${open.length})`}</button>`);
+  if(!clear&&open.length>3)$('tasks').insertAdjacentHTML('beforeend',`<div class="meta">ועוד ${open.length-3} משימות פתוחות בהמשך.</div>`);
   renderChips();
 }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
@@ -368,7 +366,6 @@ $('s').addEventListener('input',()=>{
 });
 $('tasks').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;
-  if(b.id==='tgall'){showAll=!showAll;render();return}
   const id=+b.parentElement.dataset.id,t=tasks.find(x=>x.id===id);
   if(b.dataset.a==='edit'){openEdit(t);return}
   if(b.dataset.a==='focus'){pom={end:Date.now()+25*6e4,mode:'work',name:t.name};return pomUI()}
