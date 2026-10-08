@@ -1,6 +1,6 @@
 // GET /api/cron?key=SECRET  -> call every minute (cron-job.org). Sends due push notifications.
 import webpush from 'web-push';
-import { fetchWeek } from '../lib/shahaf.js';
+import { fetchWeek, noteKind } from '../lib/shahaf.js';
 import { sb } from '../lib/sb.js';
 
 const lk = l => l.subject + '|' + l.teacher;
@@ -22,10 +22,12 @@ function israelNow() {
 }
 
 function eventsFor(s, week, T, fired) {
-  const cfg = Object.assign({ morning: '07:30', lesson: 10, dl: 24 }, s.cfg || {});
+  const cfg = Object.assign({ morning: '07:30', lesson: 10, dl: 24, xe: '20:00' }, s.cfg || {});
   const mine = new Set(s.mine || []);
   const out = [];
-  const todays = (week ? week.lessons : []).filter(l => l.day === T.wd && mine.has(lk(l)));
+  // school-free day (holiday) announced by the app: no lessons, no lesson reminders
+  const offT = (cfg.off || {})[T.day];
+  const todays = offT ? [] : (week ? week.lessons : []).filter(l => l.day === T.wd && mine.has(lk(l)));
   const open = (s.tasks || []).map(t => {
     const hrs = (Date.parse(t.due + ':00Z') - T.off - Date.now()) / 36e5;
     return { ...t, hrs, u: (t.est / 60 + 12) / (Math.max(hrs, 0.25) + 1) };
@@ -39,8 +41,20 @@ function eventsFor(s, week, T, fired) {
     const top = open.filter(t => t.hrs > 0).sort((a, b) => b.u - a.u).slice(0, 3).map(t => t.name);
     out.push({
       key: 'm' + T.day, title: 'בוקר טוב' + (cfg.name ? ', ' + String(cfg.name).slice(0, 20) : ''),
-      body: [starts.size ? `${starts.size} שיעורים היום` : 'אין שיעורים היום', top.length ? 'בוער: ' + top.join(', ') : ''].filter(Boolean).join(' · '),
+      body: [offT ? `אין לימודים היום: ${String(offT).slice(0, 40)}` : starts.size ? `${starts.size} שיעורים היום` : 'אין שיעורים היום', top.length ? 'בוער: ' + top.join(', ') : ''].filter(Boolean).join(' · '),
     });
+  }
+  // the evening before an exam
+  if (cfg.xe) {
+    const [xh, xm] = String(cfg.xe).split(':').map(Number), xMin = xh * 60 + xm;
+    if (T.min >= xMin && T.min < xMin + 180) {
+      const d = new Date(T.day + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + 1);
+      const tmr = d.toISOString().slice(0, 10);
+      (cfg.exams || []).filter(e => e.d === tmr).forEach(e => {
+        const t = String(e.t).slice(0, 40);
+        out.push({ key: 'x' + e.d + e.t, title: 'מחר: ' + t, body: `מחר מתקיים ${t}. כל החומר כבר נלמד, כדאי לנוח טוב הלילה. בהצלחה!` });
+      });
+    }
   }
   // before lessons
   todays.forEach(l => {
@@ -56,12 +70,16 @@ function eventsFor(s, week, T, fired) {
   // school changes relevant to this student
   const toks = [...mine].flatMap(k => k.split('|')).filter(x => x.length > 2);
   const notes = (week ? week.notes : []).filter(n => toks.some(k => n.text.includes(k) || k.includes(n.text)));
-  const noteEvents = notes.map(n => ({ key: `n${n.day}|${n.n}|${n.text}`, title: 'שינוי במערכת', body: n.text, note: true, day: n.day }));
+  const NT = { cancel: 'שיעור בוטל', mock: 'מתכונת במערכת', exam: 'מבחן במערכת', quiz: 'מבדק במערכת', activity: 'פעילות במערכת' };
+  const noteEvents = notes.map(n => ({
+    key: `n${n.day}|${n.n}|${n.text}`, title: NT[/^ביטול\s/.test(n.text) ? 'cancel' : noteKind(n.text)] || 'שינוי במערכת',
+    body: n.text, note: true, day: n.day,
+  }));
   // second alert: 30 min before the school day starts, for changes announced on an earlier day
   const startToday = (Math.floor(Date.now() / 60000) - T.min) * 60000;
   const dayStart = todays.length ? Math.min(...todays.map(l => { const [h, m] = l.start.split(':').map(Number); return h * 60 + m; })) : 8 * 60;
   const untilStart = dayStart - T.min;
-  if (untilStart > 0 && untilStart <= 30) {
+  if (!offT && untilStart > 0 && untilStart <= 30) {
     noteEvents
       .filter(e => e.day === T.wd && fired && fired[e.key] && fired[e.key] < startToday)
       .forEach(e => out.push({ key: 'r' + e.key + T.day, title: 'תזכורת: שינוי במערכת להיום', body: e.body }));
