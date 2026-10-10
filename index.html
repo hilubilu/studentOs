@@ -214,11 +214,17 @@ body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:
   <h2 id="fh">משימה חדשה</h2>
   <form id="f">
     <input id="n" required placeholder="שם המשימה" aria-label="שם המשימה" autocomplete="off">
+    <details id="dtl"><summary class="ghost">פירוט המשימה (אפשר להדביק הודעה מהמורה)</summary>
+      <textarea id="td" rows="5" placeholder="למשל: תרגילים 1-22 בעמודים 45-49, וקישור ל-Colab. האפליקציה תזהה כמה יש ותעריך זמן." aria-label="פירוט המשימה"></textarea>
+    </details>
     <div class="two" style="grid-template-columns:2fr 1fr">
       <input id="s" list="subs" required placeholder="מקצוע" aria-label="מקצוע" autocomplete="off"><datalist id="subs"></datalist>
       <input id="e" type="number" min="5" step="5" value="30" required aria-label="דקות משוערות" placeholder="דקות">
     </div>
     <div class="hint" id="sug"></div>
+    <div class="hint" id="xs"></div>
+    <div class="two" id="xo" hidden><div><label for="xex">תרגילים</label><input id="xex" type="number" min="0" inputmode="numeric"></div><div><label for="xpg">עמודים לקריאה</label><input id="xpg" type="number" min="0" inputmode="numeric"></div></div>
+    <input id="er" type="range" min="5" max="240" step="5" value="30" aria-label="כוונון ההערכה" hidden>
     <div class="strip" id="dc"></div>
     <div class="two">
       <input id="tmx" inputmode="numeric" placeholder="שעה, למשל 08:30" aria-label="שעה" maxlength="5" autocomplete="off">
@@ -340,7 +346,7 @@ function render(){
   $('tasks').innerHTML=shown.length?shown.map(t=>`
     <div class="task"><div class="bar" style="background:${level(t.u)}"></div>
       <div style="flex:1"><b>${esc(t.name)}</b>
-        <div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · כ-${avg(t.sub)||t.est} דק׳</div>
+        <div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · כ-${avg(t.sub)||t.est} דק׳</div>${taskExtra(t)}
         <div class="row" data-id="${t.id}">
           <button class="btn" data-a="done">סיימתי</button>
           <button class="btn alt" data-a="edit">ערוך</button>
@@ -355,11 +361,11 @@ function save(){store.set('so_tasks',tasks);store.set('so_hist',hist);pushSync()
 
 $('f').addEventListener('submit',e=>{
   e.preventDefault();
-  const fv={name:$('n').value.trim(),sub:$('s').value.trim(),est:+$('e').value,due:$('d').value+'T'+$('tm').value};
+  const fv={name:$('n').value.trim(),sub:$('s').value.trim(),est:+$('e').value,due:$('d').value+'T'+$('tm').value,details:$('td').value.trim()||undefined,f:$('td').value.trim()?(xcur||extractTask($('td').value)):undefined,estAuto:xest?xest.min:undefined};
   const ed=editId&&tasks.find(x=>x.id===editId);
   if(ed)Object.assign(ed,fv);else tasks.push({id:Date.now(),...fv,done:false});
   editId=null;$('fh').textContent='משימה חדשה';$('fs').textContent='הוסף משימה';
-  save();$('f').reset();$('e').value=30;$('sug').textContent='';setDef();$('addsec').classList.remove('open');render();
+  save();$('f').reset();$('e').value=30;$('sug').textContent='';xReset();setDef();$('addsec').classList.remove('open');render();
 });
 $('s').addEventListener('input',()=>{
   const a=avg($('s').value.trim());
@@ -1194,6 +1200,136 @@ function fbSubHTML(sub){
   return `<div class="atm"><b style="font-weight:500">לקראת המבחן הבא</b>${own?`<div style="margin-top:6px">${esc(own)}</div>`:''}${I.tips.slice(0,2).map(t=>`<div class="meta" style="margin-top:6px">${esc(t)}</div>`).join('')}</div>`;
 }
 
+// ---- complex tasks: read the teacher's message, estimate the time, learn from finished tasks ----
+var eTouched=false,xcur=null,xest=null,FC=new WeakMap();
+var STOP=new Set('של את על עם או גם כל לא אם אל עד מן זה זו הם אני אתם אנחנו יש אין היא הוא כי אבל רק כמו לפי מה איך למה כדי צריך לעשות לפתור תרגילים תרגיל שאלות שאלה בעיות בעיה סעיפים עמוד עמודים עמ בבקשה שלום כיתה תלמידים תלמידות להגיש הגשה השבוע שבוע הבא יום ראשון שני שלישי רביעי חמישי שישי קישור לינק מצורף מצורפים אפשר חשוב נא נא להעביר מורה אלה אלו שלכם לכם עבורכם הבית בית שיעורי שיעור מטלה משימה בהצלחה תודה פתרו חשבו הוכיחו סכמו כתבו קראו ענו מצאו בדקו תפתרו תקראו תכתבו להגיש הגיש מהעמוד בעמוד'.split(' '));
+function hm(m){return m>=60?`${Math.floor(m/60)} ש׳${m%60?' '+m%60+' דק׳':''}`:`${m} דק׳`}
+function keywords(text){
+  const t=text.replace(/https?:\/\/\S+/g,' ').replace(/[0-9]/g,' '),c={};
+  (t.match(/[א-ת"'׳]{3,}/g)||[]).forEach(w=>{
+    w=w.replace(/["'׳]/g,'');
+    if(STOP.has(w))return;
+    if(w.length>4&&/^[ובלהמכש]/.test(w))w=w.slice(1);
+    if(w.length<3||STOP.has(w))return;
+    c[w]=(c[w]||0)+1;
+  });
+  return Object.keys(c).sort((a,b)=>c[b]-c[a]||b.length-a.length).slice(0,6);
+}
+// Reads the teacher's message line by line. A page reference followed by exercises ("עמוד 424 שאלות 7,8")
+// is only where the exercises are, so it is not counted as reading time. Pages count only when the line has no exercises.
+function extractTask(text){
+  const T=String(text||'').replace(/[\u200e\u200f]/g,'').replace(/(\d)\s*עד\s*(\d)/g,'$1-$2');
+  const links=[];
+  (T.match(/https?:\/\/[^\s<>"')\]]+/g)||[]).forEach(u=>{
+    u=u.replace(/[.,;:!?]+$/,'');if(links.some(l=>l.url===u))return;
+    const h=(u.match(/^https?:\/\/([^\/?#]+)/)||[])[1]||'';
+    links.push({url:u,label:/colab\.research\.google/.test(u)?'Colab':/drive\.google|docs\.google/.test(u)?'Drive':/youtu/.test(u)?'סרטון':/\.pdf(\?|$)/i.test(u)?'PDF':h.replace(/^www\./,'')});
+  });
+  const body=T.replace(/https?:\/\/\S+/g,' ');
+  const ITEM='\\d{1,4}(?:\\s*[-–—]\\s*\\d{1,4})?',LIST=ITEM+'(?:\\s*(?:[,،]\\s*|ו-?\\s*)'+ITEM+')*';
+  const EXK='תרגילים|תרגיל|שאלות|שאלה|בעיות|בעיה|סעיפים|משימות',PGK='עמודים|עמוד|עמ[\'׳’]?|pages?';
+  const nums=chunk=>{
+    const set=new Set();
+    chunk.split(/[,،\s]+/).forEach(x=>{
+      x=x.replace(/^ו-?/,'');
+      const m=x.match(/^(\d{1,4})\s*[-–—]\s*(\d{1,4})$/);
+      if(m){const a=+m[1],b=+m[2];if(b>=a&&b-a<200)for(let k=a;k<=b;k++)set.add(k)}
+      else if(/^\d{1,4}$/.test(x))set.add(+x);
+    });
+    return set;
+  };
+  let ex=0,read=new Set(),loc=new Set(),pgExplicit=0;
+  body.split('\n').forEach(line=>{
+    let l=line,lx=0;const pgs=new Set();
+    const rp=new RegExp('(?:'+PGK+')\\s*('+LIST+')(?:\\s*והלאה)?(?:\\s*:\\s*('+LIST+'))?','g');
+    let mm;
+    while((mm=rp.exec(line))){nums(mm[1]).forEach(x=>pgs.add(x));if(mm[2])lx+=nums(mm[2]).size}
+    l=l.replace(rp,' ');
+    let sum=0,best=0;
+    const rl=new RegExp('(?:'+EXK+')\\s*(?:מספר|מס[\'׳]?)?\\s*:?\\s*('+LIST+')','g');
+    while((mm=rl.exec(l)))sum+=nums(mm[1]).size;
+    const rc=new RegExp('(?:^|[^\\d])(\\d{1,3})\\s+(?:'+EXK+')','g');
+    while((mm=rc.exec(l)))best=Math.max(best,+mm[1]);
+    const rpe=new RegExp('(?:^|[^\\d])(\\d{1,3})\\s+(?:עמודים|עמוד|pages?)','g');
+    while((mm=rpe.exec(l)))pgExplicit=Math.max(pgExplicit,+mm[1]);
+    const lineEx=Math.max(best,sum+lx);
+    ex+=lineEx;
+    pgs.forEach(x=>(lineEx?loc:read).add(x));
+  });
+  if(!ex){const n=body.split('\n').filter(l=>/^\s*\d{1,3}[.)]\s+\S/.test(l)).length;if(n>=3)ex=n}
+  return {ex,pg:Math.max(read.size,pgExplicit),loc:loc.size,links,kw:keywords(body)};
+}
+function featOf(t){
+  if(t.f)return t.f;
+  if(!t.details)return null;
+  if(!FC.has(t))FC.set(t,extractTask(t.details));
+  return FC.get(t);
+}
+function simKw(a,b){
+  if(!a||!b||!a.length||!b.length)return 0;
+  const s=new Set(a);let i=0;b.forEach(x=>{if(s.has(x))i++});
+  return i/(s.size+b.length-i);
+}
+// minutes per exercise / per page for a subject: starts from a default and moves toward what finished tasks show.
+// Newer and more similar tasks count more; with no history the default is used ("cold start").
+function estimateTask(sub,f){
+  const PRI={ex:6,pg:5},K=2,HL=30,now=Date.now();
+  const done=tasks.filter(t=>t.done&&!t.del&&t.act&&t.sub===sub).map(t=>({t,g:featOf(t)})).filter(x=>x.g&&(x.g.ex||x.g.pg));
+  const unit=kind=>{
+    const rows=done.filter(x=>x.g[kind]).map(x=>{
+      const other=kind==='ex'?x.g.pg*PRI.pg:x.g.ex*PRI.ex;
+      const m=Math.max(x.t.act-other,x.g[kind]);
+      return {r:m/x.g[kind],w:Math.pow(.5,(now-(x.t.doneAt||x.t.id))/864e5/HL),sim:simKw(f.kw,x.g.kw)};
+    });
+    if(!rows.length)return {u:PRI[kind],n:0,sim:0};
+    let sw=0,sr=0;rows.forEach(x=>{const w=x.w*(.4+1.6*x.sim);sw+=w;sr+=w*x.r});
+    return {u:(sr+K*PRI[kind])/(sw+K),n:rows.length,sim:Math.max(...rows.map(x=>x.sim))};
+  };
+  const parts=[];let min=0,n=0;
+  if(f.ex){const u=unit('ex');min+=f.ex*u.u;n=Math.max(n,u.n);parts.push(`${f.ex} תרגילים × ${Math.round(u.u*10)/10} דק׳`)}
+  if(f.pg){const u=unit('pg');min+=f.pg*u.u;n=Math.max(n,u.n);parts.push(`${f.pg} עמודים × ${Math.round(u.u*10)/10} דק׳`)}
+  min=Math.max(5,Math.round(min/5)*5);
+  const basis=n?`לפי ${n} משימות שסיימת ב${sub}, ככל שהן דומות ועדכניות הן משפיעות יותר`:'הערכת פתיחה: עוד אין משימות דומות שסיימת, והיא תתעדכן אחרי שתזין זמן בפועל';
+  return {min,n,expl:`${parts.join(' + ')}. ${basis}.`};
+}
+function taskExtra(t){
+  const f=featOf(t);if(!f)return '';
+  const u=[];if(f.ex)u.push(f.ex+' תרגילים');if(f.pg)u.push(f.pg+' עמודים');
+  return (u.length?`<div class="meta">${u.join(' · ')}</div>`:'')
+    +(f.links.length?`<div class="row">${f.links.map(l=>`<a class="chip" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join('')}</div>`:'')
+    +(t.details?`<details class="meta"><summary>פירוט</summary><div style="white-space:pre-wrap">${esc(t.details)}</div></details>`:'');
+}
+var xOvr=false;
+function xReset(){eTouched=false;xOvr=false;xcur=null;xest=null;$('xs').textContent='';$('er').hidden=true;$('xo').hidden=true;$('xex').value='';$('xpg').value=''}
+function xRefresh(){
+  const txt=$('td').value.trim(),sub=$('s').value.trim(),box=$('xs');
+  if(!txt){xReset();return}
+  const f=extractTask(txt);
+  if(xOvr){f.ex=Math.max(0,Math.round(+$('xex').value||0));f.pg=Math.max(0,Math.round(+$('xpg').value||0))}
+  else{$('xex').value=f.ex;$('xpg').value=f.pg}
+  xcur=f;xest=null;
+  const parts=[];
+  if(f.ex)parts.push(f.ex+' תרגילים'+(f.loc?` (ב-${f.loc} עמודים)`:''));
+  if(f.pg)parts.push(f.pg+' עמודים לקריאה');
+  f.links.forEach(l=>parts.push(l.label));
+  let h=parts.length?'זוהו: '+esc(parts.join(' · ')):'לא זוהו תרגילים או עמודים בטקסט. אפשר להזין את המספרים בעצמך.';
+  if(f.ex>120||f.pg>60)h+='<br>המספרים נראים גבוהים, כדאי לבדוק ולתקן אותם למטה.';
+  $('xo').hidden=false;
+  if(f.ex||f.pg){
+    xest=estimateTask(sub,f);
+    h+=`<br>הערכה: ${hm(xest.min)}. ${esc(xest.expl)}`;
+    if(!eTouched)$('e').value=xest.min;
+    const er=$('er');er.hidden=false;er.max=Math.max(240,Math.ceil(Math.max(xest.min,+$('e').value)*2/60)*60);er.value=$('e').value;
+  }else $('er').hidden=true;
+  box.innerHTML=h;
+}
+$('xex').addEventListener('input',()=>{xOvr=true;eTouched=false;xRefresh()});
+$('xpg').addEventListener('input',()=>{xOvr=true;eTouched=false;xRefresh()});
+$('td').addEventListener('input',()=>{xOvr=false;xRefresh()});
+$('s').addEventListener('input',xRefresh);
+$('e').addEventListener('input',()=>{eTouched=true;if(!$('er').hidden)$('er').value=$('e').value});
+$('er').addEventListener('input',()=>{eTouched=true;$('e').value=$('er').value});
+
 // ---- evening switch: from the set hour the main screen shows the next school day ----
 var evView=null; // 'today' when the person asked to keep seeing today
 function wkOk(d){
@@ -1347,14 +1483,14 @@ let editId=null;
 function openEdit(t){
   editId=t.id;
   $('fh').textContent='עריכת משימה';$('fs').textContent='שמור שינויים';
-  $('n').value=t.name;$('s').value=t.sub;$('e').value=t.est;$('sug').textContent='';
+  $('n').value=t.name;$('s').value=t.sub;$('e').value=t.est;$('sug').textContent='';$('td').value=t.details||'';$('dtl').open=!!t.details;xReset();if(t.f){$('xex').value=t.f.ex||0;$('xpg').value=t.f.pg||0;xOvr=true}eTouched=true;xRefresh();
   $('d').value=t.due.slice(0,10);$('tm').value=t.due.slice(11,16);
   touched=true;dhmsg='';$('mp').hidden=true;buildStrip();
   $('addsec').classList.add('open');
 }
 function cancelEdit(){
   editId=null;$('fh').textContent='משימה חדשה';$('fs').textContent='הוסף משימה';
-  $('f').reset();$('e').value=30;$('sug').textContent='';setDef();
+  $('f').reset();$('e').value=30;$('sug').textContent='';xReset();setDef();
 }
 function closeSheet(){$('addsec').classList.remove('open');if(editId)cancelEdit()}
 
