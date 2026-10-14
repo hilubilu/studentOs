@@ -3,6 +3,7 @@
 <head>
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#6f9c86">
+<meta name="theme-color" content="#f6f4ef">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -94,7 +95,7 @@ body{min-height:100dvh;touch-action:manipulation}
 #dmore{width:100%}
 #cal{display:none}
 body.calmode #cal{display:block}
-body.calmode #pbn,body.calmode #sched,body.calmode #evsec,body.calmode #pom,body.calmode #tasksec,body.calmode .setup,body.calmode #clear{display:none!important}
+body.calmode #pbn,body.calmode #sched,body.calmode #evsec{display:none!important}
 .cct{display:grid;gap:10px;margin:18px 0 10px}
 .cseg{display:flex;gap:6px;flex-wrap:wrap}
 .cn{display:flex;align-items:center;gap:8px}.cn b{flex:1;text-align:center;font-weight:500}
@@ -141,8 +142,9 @@ input[type=checkbox]{width:auto;accent-color:var(--ac)}
 .attbig{font-size:34px;font-weight:500;display:flex;align-items:center;gap:10px;margin-top:14px}.attbig i{width:14px;height:14px;border-radius:50%;display:inline-block}
 .atm{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;line-height:1.5}
 .lesson[data-sub]{cursor:pointer}
-body.subjmode main>:not(#spage),body.subjmode #fab,body.subjmode #clear{display:none!important}
-body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:none!important}
+body.subjmode main>:not(#spage),body.subjmode #fab,body.subjmode #tabs{display:none!important}
+body.setmode main>:not(#setpage),body.setmode #fab,body.setmode #tabs{display:none!important}
+body.frmode main>:not(#fpage),body.frmode #fab,body.frmode #tabs{display:none!important}
 .ov{display:grid;grid-template-columns:1fr 1fr;gap:16px}.ov small{display:block;color:var(--mute);font-size:12px}.ov b{font-weight:500;font-size:18px}
 .dotu{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:8px}
 .oc{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}.oc:last-child{border:0}.oc .ktag{flex:none;margin-top:2px}
@@ -174,6 +176,63 @@ body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:
 #mp{background:var(--card);border-radius:16px;padding:10px;display:grid;gap:8px}
 .ev.edit{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0}
 .ev .x{font-size:18px;padding:2px 6px}
+
+.panel{display:none}.panel.on{display:block;animation:pin .22s ease both}
+@keyframes pin{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){.panel.on{animation:none}}
+#tabs{position:fixed;inset-inline:0;bottom:0;z-index:14;display:flex;justify-content:center;gap:6px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+#tabs button{flex:1;max-width:180px;background:none;border:0;border-radius:999px;padding:10px 0;color:var(--mute);cursor:pointer;font-weight:500}
+#tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+#fab{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+body #snk{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+main{padding-bottom:150px}
+.seg{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin:16px 0 4px;width:max-content;max-width:100%}
+.seg button{background:none;border:0;border-radius:999px;padding:6px 18px;color:var(--mute);cursor:pointer}
+.seg button.on{background:var(--ac);color:#fff}
+.pals{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pal{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:start;cursor:pointer;display:grid;gap:4px;color:var(--ink)}
+.pal.on{outline:2px solid var(--ac)}
+.pal .sw{display:flex;gap:4px}.pal .sw i{width:18px;height:18px;border-radius:50%;display:block}
+.pal small{color:var(--mute)}
+.srow .grow{flex:1}
+.setp.setup{margin-top:12px;display:grid;gap:16px}.setp[hidden]{display:none}
+body,button,input,select,textarea{font-family:var(--font,Heebo,sans-serif)}
+h1,h2{font-family:var(--font,Heebo,sans-serif)}
+
+.fdot{width:12px;height:12px;border-radius:50%;flex:none;margin-top:8px;background:var(--mute)}
+.f-free{background:var(--g)}.f-class{background:var(--r)}.f-event{background:var(--y)}
+.frow{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}.frow:last-child{border:0}
+.frow .grow{min-width:0}
+.frcode{font:600 30px/1.2 monospace;letter-spacing:.12em;direction:ltr;text-align:center;margin:8px 0}
+.t-free{background:var(--g);color:#1b1f1c}.t-fclass{background:var(--r);color:#1b1f1c}.t-fevent{background:var(--y);color:#1b1f1c}.t-fghost{background:var(--mute);color:#fff}
+.fov{padding:4px 0;font-size:14px}
+
+/* ---- retro 2000 theme: classic grey windows, navy title bars, bevels and pixel art ---- */
+html[data-pal=retro] *{border-radius:0!important;text-shadow:none}
+html[data-pal=retro] body{background-color:var(--bg);background-image:conic-gradient(#0000000f 25%,transparent 0 50%,#0000000f 0 75%,transparent 0);background-size:4px 4px;-webkit-font-smoothing:none;font-size:15px}
+html[data-pal=retro] :is(#sched,#evsec,#tasksec,#subsec,.spc,.setup .box,#cal,.box){background:var(--card);border:2px solid;border-color:var(--bvl) var(--bvd) var(--bvd) var(--bvl);box-shadow:inset -1px -1px var(--bvm),2px 2px 0 #00000055}
+html[data-pal=retro] :is(#sched,#evsec,#tasksec,#subsec){padding:0 10px 10px;margin-top:18px}
+html[data-pal=retro] :is(#sched,#evsec,#tasksec,#subsec)>h2{margin:0 -10px 10px;padding:3px 8px;background:linear-gradient(90deg,var(--tb1),var(--tb2));color:#fff;font-size:14px;letter-spacing:0;display:flex;justify-content:space-between;align-items:center}
+html[data-pal=retro] :is(#sched,#evsec,#tasksec,#subsec)>h2::after{content:"_ \25A1 \00D7";font:700 11px/1 monospace;background:var(--card);color:var(--ink);padding:2px 5px;border:1px solid;border-color:var(--bvl) var(--bvd) var(--bvd) var(--bvl);letter-spacing:2px}
+html[data-pal=retro] .spc .spt{background:linear-gradient(90deg,var(--tb1),var(--tb2));color:#fff;padding:3px 8px;margin:-20px -20px 14px;font-size:14px}
+html[data-pal=retro] :is(.task,.kc,.atm,.prl,.fq){background:var(--fld);border:2px solid;border-color:var(--bvm) var(--bvl) var(--bvl) var(--bvm);box-shadow:none}
+html[data-pal=retro] :is(.btn,.ghost,.chip,#tabs button,.seg button,.pal,#fab,.x,.dfc button,.scl button){background:var(--card);color:var(--ink);border:2px solid;border-color:var(--bvl) var(--bvd) var(--bvd) var(--bvl);box-shadow:inset -1px -1px var(--bvm);font-weight:700}
+html[data-pal=retro] :is(.btn,.ghost,.chip,#tabs button,.seg button,.pal,#fab,.x,.dfc button,.scl button):active,html[data-pal=retro] :is(#tabs button.on,.seg button.on,.pal.on,.dfc button.on,.scl button.on){border-color:var(--bvd) var(--bvl) var(--bvl) var(--bvd);box-shadow:inset 1px 1px var(--bvm);background:var(--card);color:var(--ink);outline:0}
+html[data-pal=retro] :is(#tabs button.on,.seg button.on){background:var(--fld)}
+html[data-pal=retro] :is(input,select,textarea){background:var(--fld);color:var(--ink);border:2px solid;border-color:var(--bvd) var(--bvl) var(--bvl) var(--bvd)}
+html[data-pal=retro] #tabs{background:var(--card);border-top:2px solid var(--bvl);box-shadow:0 -1px var(--bvd);-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-pal=retro] #fab{width:54px;height:54px;font-size:30px;color:var(--ink)}
+html[data-pal=retro] :is(.lesson,.frow,.hab,.oc,.srow){border-bottom:1px dotted var(--bvm)}
+html[data-pal=retro] :is(.gauge,.trk,.lvl,.hbar){border:2px solid;border-color:var(--bvm) var(--bvl) var(--bvl) var(--bvm);background:var(--fld)}
+html[data-pal=retro] ::selection{background:var(--tb1);color:#fff}
+html[data-pal=retro] header h1::before{content:"";display:inline-block;width:28px;height:28px;margin-inline-end:10px;vertical-align:-5px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'%3E%3Crect x='2' y='0' width='6' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='1' width='6' height='1' fill='%23ffd84a'/%3E%3Crect x='8' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='2' width='8' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='2' y='5' width='1' height='1' fill='%23ff8aa0'/%3E%3Crect x='3' y='5' width='4' height='1' fill='%23ffd84a'/%3E%3Crect x='7' y='5' width='1' height='1' fill='%23ff8aa0'/%3E%3Crect x='8' y='5' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='3' y='6' width='4' height='1' fill='%23ffd84a'/%3E%3Crect x='7' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='8' y='6' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='7' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='7' width='4' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='7' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='8' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='8' width='6' height='1' fill='%23ffd84a'/%3E%3Crect x='8' y='8' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='9' width='6' height='1' fill='%233b2f2f'/%3E%3C/svg%3E") center/contain no-repeat;image-rendering:pixelated}
+html[data-pal=retro] #tabs button::before{content:"";display:inline-block;width:16px;height:16px;margin-inline-end:6px;vertical-align:-3px;background:center/contain no-repeat;image-rendering:pixelated}
+html[data-pal=retro] #tabs button[data-p="0"]::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'%3E%3Crect x='1' y='1' width='8' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='2' width='6' height='1' fill='%23e8625c'/%3E%3Crect x='8' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='3' width='6' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='4' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='4' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='5' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='6' y='4' width='2' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='5' width='6' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='3' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='6' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='5' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='6' y='6' width='2' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='7' width='6' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='8' width='8' height='1' fill='%233b2f2f'/%3E%3C/svg%3E")}
+html[data-pal=retro] #tabs button[data-p="1"]::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'%3E%3Crect x='1' y='1' width='8' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='2' width='6' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='3' width='1' height='1' fill='%2358b368'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='4' y='3' width='3' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='3' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='4' width='6' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='5' width='1' height='1' fill='%2358b368'/%3E%3Crect x='3' y='5' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='4' y='5' width='3' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='5' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='6' width='6' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='7' width='1' height='1' fill='%2358b368'/%3E%3Crect x='3' y='7' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='4' y='7' width='3' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='7' width='1' height='1' fill='%23ffffff'/%3E%3Crect x='8' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='8' width='8' height='1' fill='%233b2f2f'/%3E%3C/svg%3E")}
+html[data-pal=retro] #tabs button[data-p="2"]::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'%3E%3Crect x='4' y='0' width='2' height='1' fill='%233b2f2f'/%3E%3Crect x='3' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='1' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='3' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='2' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='3' width='2' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='4' width='6' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='5' width='6' height='1' fill='%234a78c8'/%3E%3Crect x='8' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='6' width='6' height='1' fill='%234a78c8'/%3E%3Crect x='8' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='7' width='6' height='1' fill='%234a78c8'/%3E%3Crect x='8' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='8' width='8' height='1' fill='%233b2f2f'/%3E%3C/svg%3E")}
+html[data-pal=retro] .empty::before{content:"";display:block;width:26px;height:26px;margin:0 auto 6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'%3E%3Crect x='2' y='0' width='6' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='1' width='6' height='1' fill='%23ffd84a'/%3E%3Crect x='8' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='2' width='8' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='2' y='5' width='1' height='1' fill='%23ff8aa0'/%3E%3Crect x='3' y='5' width='4' height='1' fill='%23ffd84a'/%3E%3Crect x='7' y='5' width='1' height='1' fill='%23ff8aa0'/%3E%3Crect x='8' y='5' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='3' y='6' width='4' height='1' fill='%23ffd84a'/%3E%3Crect x='7' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='8' y='6' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='7' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='7' width='4' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='7' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='8' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='8' width='6' height='1' fill='%23ffd84a'/%3E%3Crect x='8' y='8' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='9' width='6' height='1' fill='%233b2f2f'/%3E%3C/svg%3E") center/contain no-repeat;image-rendering:pixelated}
+html[data-pal=retro] .pgs{image-rendering:pixelated}
+html[data-pal=retro]{scrollbar-color:var(--bvm) var(--card)}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
@@ -181,35 +240,37 @@ body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:
 <main>
 <header>
   <div><h1 id="hello">היום</h1><div class="date" id="date"></div></div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
-    <button class="ghost" id="profb">פרופיל</button>
-    <button class="ghost" id="calb">יומן</button>
-    <button class="ghost" id="clear">מצב ריכוז</button>
-    <button class="ghost" id="theme">כהה/בהיר</button>
-  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="ghost" id="frb" type="button">חברים</button><button class="ghost" id="setb" type="button">הגדרות</button></div>
 </header>
+<div id="pom" class="task" hidden></div>
+<div id="panels">
+<div class="panel on" id="pn0">
 <section id="fbc" class="spc" hidden></section>
+<div class="seg" id="dseg"><button type="button" class="on" data-v="day">היום</button><button type="button" data-v="cal">יומן</button></div>
 <section id="cal">
   <div class="cct"><div class="cseg" id="cseg"></div>
     <div class="cn"><button class="ghost" id="cp" aria-label="הקודם">›</button><b id="cti"></b><button class="ghost" id="cnx" aria-label="הבא">‹</button><button class="ghost" id="ctd">היום</button></div></div>
   <div id="cbody"></div>
 </section>
-
 <div id="pbn" class="task" hidden></div>
 <section id="sched">
   <h2>המערכת של היום</h2>
   <div class="eve" id="eve" hidden></div>
+  <div class="meta" id="syn" style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px" hidden></div>
   <div id="lessons"></div>
 </section>
-
 <section id="evsec" hidden><h2>בקרוב</h2><div id="ev"></div></section>
-
-<div id="pom" class="task" hidden></div>
+</div>
+<div class="panel" id="pn1">
 <section id="tasksec">
   <h2 id="th">שלוש המשימות הבוערות</h2>
   <div id="tasks"></div>
 </section>
-
+<section id="subsec" hidden><h2>מקצועות</h2><div id="sublist"></div></section>
+<details class="setup" style="margin-top:16px"><summary class="ghost">היסטוריה</summary><div class="box" id="hl"></div></details>
+</div>
+<div class="panel" id="pn2"><div id="meb"></div></div>
+</div>
 <section id="addsec"><button class="x" id="cx" type="button" aria-label="סגור" style="float:left;font-size:22px">×</button>
   <h2 id="fh">משימה חדשה</h2>
   <form id="f">
@@ -219,12 +280,12 @@ body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:
     </details>
     <div class="two" style="grid-template-columns:2fr 1fr">
       <input id="s" list="subs" required placeholder="מקצוע" aria-label="מקצוע" autocomplete="off"><datalist id="subs"></datalist>
-      <input id="e" type="number" min="5" step="5" value="30" required aria-label="דקות משוערות" placeholder="דקות">
+      <input id="e" type="number" min="1" step="1" value="30" required aria-label="דקות משוערות" placeholder="דקות">
     </div>
     <div class="hint" id="sug"></div>
     <div class="hint" id="xs"></div>
     <div class="two" id="xo" hidden><div><label for="xex">תרגילים</label><input id="xex" type="number" min="0" inputmode="numeric"></div><div><label for="xpg">עמודים לקריאה</label><input id="xpg" type="number" min="0" inputmode="numeric"></div></div>
-    <input id="er" type="range" min="5" max="240" step="5" value="30" aria-label="כוונון ההערכה" hidden>
+    <input id="er" type="range" min="1" max="240" step="1" value="30" aria-label="כוונון ההערכה" hidden>
     <div class="strip" id="dc"></div>
     <div class="two">
       <input id="tmx" inputmode="numeric" placeholder="שעה, למשל 08:30" aria-label="שעה" maxlength="5" autocomplete="off">
@@ -236,41 +297,18 @@ body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:
     <button class="btn" type="submit" id="fs">הוסף משימה</button>
   </form>
 </section>
-
-<details class="setup" id="st"><summary class="ghost">מערכת ואירועים</summary>
-  <div class="box">
-    <div><label for="nmn">איך לקרוא לך?</label><input id="nmn" autocomplete="given-name" maxlength="20" placeholder="השם שלך"></div>
-    <div><label for="cls">כיתה</label><input id="cls" placeholder="יא - 1" list="clsl" autocomplete="off"><datalist id="clsl"></datalist></div>
-    <button class="btn" type="button" id="sy">סנכרן מערכת מבית הספר</button>
-    <div class="hint" id="sym"></div>
-    <div id="pick"></div>
-    <div><label for="dy">מערכת השעות ליום</label><select id="dy"></select></div>
-    <textarea id="lt" rows="5" placeholder="שורה לכל שיעור:&#10;08:00 מתמטיקה&#10;09:45 אנגלית"></textarea>
-    <button class="btn" type="button" id="ss">שמור יום</button>
-    <div class="hint" id="sm"></div>
-  </div>
-  <div class="box">
-    <div><label for="pdf">אירועי השנה (PDF)</label><input id="pdf" type="file" accept="application/pdf"></div>
-    <textarea id="pt" rows="5" placeholder="או הדביקו כאן טקסט, שורה לכל אירוע:&#10;12.10 חופש סוכות&#10;3/11 מבחן במתמטיקה"></textarea>
-    <button class="btn" type="button" id="pb">הוסף אירועים</button>
-    <div class="hint" id="pm"></div>
-    <div id="prv" hidden></div>
-    <div class="two"><input id="evn" placeholder="אירוע חדש" aria-label="שם האירוע" autocomplete="off"><input id="evd" type="date" aria-label="תאריך האירוע"></div>
-    <div class="g2"><select id="evk" aria-label="סוג האירוע"></select><input id="evt" type="time" aria-label="שעה (לא חובה)"></div>
-    <button class="btn alt" type="button" id="eva">הוסף אירוע</button>
-    <div id="evl"></div>
-  </div>
-  <div class="box">
-    <b>שנת הלימודים</b>
-    <div class="g2"><div><label for="yra">תחילה</label><input id="yra" type="date"></div><div><label for="yrb">סיום</label><input id="yrb" type="date"></div></div>
-    <div class="hint">משמש לחישוב אוטומטי של סך שעות כל מקצוע.</div>
-  </div>
+<section id="spage" hidden><div id="spb"></div></section>
+<section id="fpage" hidden><div id="fpb"></div></section>
+<section id="setpage" hidden>
+<button class="ghost" type="button" id="sbk">› חזרה</button>
+<h1 class="sph" id="sttl">הגדרות</h1>
+<div id="sidx"><button class="srow" type="button" data-v="notif"><span class="grow"><b style="font-weight:500">התראות וסנכרון</b><div class="meta">תזכורות, התראות ומכשירים מחוברים</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="sched"><span class="grow"><b style="font-weight:500">מערכת ואירועים</b><div class="meta">סנכרון מבית הספר, אירועי השנה ושעות</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="prof"><span class="grow"><b style="font-weight:500">פרופיל ופרטיות</b><div class="meta">שם, ופרטיות מול חברים</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="theme"><span class="grow"><b style="font-weight:500">עיצוב וערכות נושא</b><div class="meta">מצב כהה או בהיר, צבעים וגופן</div></span><span class="meta">‹</span></button></div>
+<div class="setp setup" data-p="notif" hidden>
   <div class="box">
     <div><label for="nm">תזכורת בוקר</label><input id="nm" type="time"></div>
     <div><label for="nl">התראה לפני שיעור (דקות)</label><input id="nl" type="number" min="1" max="120"></div>
     <div><label for="nd">התראה לפני דדליין (שעות, בנוסף לזמן המשוער של המשימה)</label><input id="nd" type="number" min="1" max="168"></div>
     <div><label for="nx">התראת ערב לפני מבחן, נשלחת בשעה (ריק = כבוי)</label><input id="nx" type="time"></div>
-    <div><label for="ne">מעבר לתצוגת ערב: מציג את המערכת של מחר החל מהשעה (ריק = כבוי)</label><input id="ne" type="time"></div>
     <button class="btn" type="button" id="nb">הפעל התראות</button>
     <button class="btn alt" type="button" id="nt">שלח התראת בדיקה</button>
     <div class="hint" id="ns"></div>
@@ -289,20 +327,52 @@ body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:
     </div>
     <div class="hint" id="scm"></div>
   </div>
-</details>
-
-<details class="setup" style="margin-top:16px"><summary class="ghost">היסטוריה</summary><div class="box" id="hl"></div></details>
-<details class="setup" style="margin-top:16px"><summary class="ghost">סיכום שבועי</summary>
-  <div class="box" id="wk"></div>
+</div>
+<div class="setp setup" data-p="sched" hidden>
   <div class="box">
-    <div class="two"><div><label for="gs">מקצוע</label><input id="gs" list="subs"></div><div><label for="gg">ציון</label><input id="gg" type="number" min="0" max="100"></div></div>
-    <div><label for="gf">איך הרגיש?</label><select id="gf"><option>קל</option><option>בינוני</option><option>קשה</option></select></div>
-    <button class="btn" type="button" id="gb">שמור ציון</button>
+    <div><label for="cls">כיתה</label><input id="cls" placeholder="יא - 1" list="clsl" autocomplete="off"><datalist id="clsl"></datalist></div>
+    <button class="btn" type="button" id="sy">סנכרן מערכת מבית הספר</button>
+    <div class="hint" id="sym"></div>
+    <div id="pick"></div>
+    <div><label for="dy">מערכת השעות ליום</label><select id="dy"></select></div>
+    <textarea id="lt" rows="5" placeholder="שורה לכל שיעור:&#10;08:00 מתמטיקה&#10;09:45 אנגלית"></textarea>
+    <button class="btn" type="button" id="ss">שמור יום</button>
+    <div class="hint" id="sm"></div>
   </div>
-</details>
-<section id="spage" hidden><div id="spb"></div></section>
-<section id="ppage" hidden><div id="ppb"></div></section>
+  <div class="box">
+    <div><label for="ne">מעבר לתצוגת ערב: מציג את המערכת של מחר החל מהשעה (ריק = כבוי)</label><input id="ne" type="time"></div>
+  </div>
+  <div class="box">
+    <b>שנת הלימודים</b>
+    <div class="g2"><div><label for="yra">תחילה</label><input id="yra" type="date"></div><div><label for="yrb">סיום</label><input id="yrb" type="date"></div></div>
+    <div class="hint">משמש לחישוב אוטומטי של סך שעות כל מקצוע.</div>
+  </div>
+  <div class="box">
+    <div><label for="pdf">אירועי השנה (PDF)</label><input id="pdf" type="file" accept="application/pdf"></div>
+    <textarea id="pt" rows="5" placeholder="או הדביקו כאן טקסט, שורה לכל אירוע:&#10;12.10 חופש סוכות&#10;3/11 מבחן במתמטיקה"></textarea>
+    <button class="btn" type="button" id="pb">הוסף אירועים</button>
+    <div class="hint" id="pm"></div>
+    <div id="prv" hidden></div>
+    <div class="two"><input id="evn" placeholder="אירוע חדש" aria-label="שם האירוע" autocomplete="off"><input id="evd" type="date" aria-label="תאריך האירוע"></div>
+    <div class="g2"><select id="evk" aria-label="סוג האירוע"></select><input id="evt" type="time" aria-label="שעה (לא חובה)"></div>
+    <button class="btn alt" type="button" id="eva">הוסף אירוע</button>
+    <div id="evl"></div>
+  </div>
+</div>
+<div class="setp setup" data-p="prof" hidden>
+  <div class="box"><div><label for="nmn">איך לקרוא לך?</label><input id="nmn" autocomplete="given-name" maxlength="20" placeholder="השם שלך"></div></div>
+  <div class="box">
+    <b>פרטיות</b>
+    <label class="chk"><input type="checkbox" id="gh1"> מצב בלתי נראה</label>
+    <div class="hint">כשתתחבר לחברים, תופיע כעסוק גם אם הלו"ז שלך פנוי.</div>
+    <label class="chk"><input type="checkbox" id="gh2"> להציג לחברים רק "בשיעור", בלי שם המקצוע והכיתה</label>
+    <div class="hint">ההגדרות חלות על חברים שאישרת בלבד. אם לא הפעלת חברים, שום מידע לא נשלח.</div>
+  </div>
+</div>
+<div class="setp setup" data-p="theme" hidden><div class="box" id="thb"></div></div>
+</section>
 </main>
+<nav id="tabs" aria-label="ניווט ראשי"><button type="button" class="on" data-p="0">היום</button><button type="button" data-p="1">משימות</button><button type="button" data-p="2">אני</button></nav>
 <dialog id="dlg"><h2 style="margin:0 0 4px;font-size:20px;color:var(--ink)">כמה זמן זה לקח?</h2><div class="meta" id="dlt"></div><div class="chips" id="dlc" style="margin:14px 0"></div><div class="row"><input id="dli" type="number" min="1" style="flex:1" aria-label="דקות"><button class="btn" id="dlok" type="button">סיום</button><button class="btn alt" id="dlno" type="button">ביטול</button></div></dialog>
 
 <div id="snk" hidden><span id="snm"></span><button id="snu" type="button">בטל</button></div>
@@ -310,14 +380,13 @@ body.profmode main>:not(#ppage),body.profmode #fab,body.profmode #clear{display:
 
 <script>
 const $=id=>document.getElementById(id);
-const SYNCK=['so_fb','so_yr','so_att','so_tasks','so_hist','so_gr','so_days','so_mine','so_picked','so_cls','so_name','so_ev'];
+const SYNCK=['so_fr','so_priv','so_fb','so_yr','so_att','so_tasks','so_hist','so_gr','so_days','so_mine','so_picked','so_cls','so_name','so_ev'];
 const store={
   get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v));if(SYNCK.includes(k)){localStorage.setItem('so_dirty','1');if(window.schedSync)schedSync()}}catch(e){}}
 };
 let tasks=store.get('so_tasks',[]);
 let hist=store.get('so_hist',{}); // subject -> [actual minutes]
-let clear=false;
 
 let sched=store.get('so_sched',{});let evs=store.get('so_ev',[]);
 
@@ -335,25 +404,24 @@ function render(){
   const now=new Date();
   $('date').textContent=now.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
   const ls=sched[now.getDay()]||[];
-  fbUI();
+  fbUI();synUI();
   const vw=viewDay(now);$('lessons').innerHTML=lessonsHTML(vw.d);eveUI(vw,now);
   const open=tasks.filter(t=>!t.done&&!t.del).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u);
   if(open.length<=3)showAll=false;
-  const shown=clear?open.slice(0,1):showAll?open:open.slice(0,3);
-  $('th').textContent=clear?'המשימה הבוערת ביותר':showAll?`כל המשימות הפתוחות (${open.length})`:'שלוש המשימות הבוערות';
-  document.body.classList.toggle('focus',clear);
-  $('sched').hidden=clear;renderEv();streakUI();renderWeek();renderChips();renderHist();renderCal();$('addsec').hidden=clear;$('fab').hidden=clear;
+  const shown=showAll?open:open.slice(0,3);
+  $('th').textContent=showAll?`כל המשימות הפתוחות (${open.length})`:'שלוש המשימות הבוערות';
+  renderEv();streakUI();renderChips();renderHist();renderCal();renderSubs();if(pnIdx===2)renderProf();
   $('tasks').innerHTML=shown.length?shown.map(t=>`
     <div class="task"><div class="bar" style="background:${level(t.u)}"></div>
       <div style="flex:1"><b>${esc(t.name)}</b>
-        <div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · כ-${avg(t.sub)||t.est} דק׳</div>${taskExtra(t)}
+        <div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · ${t.est} דק׳</div>${taskExtra(t)}
         <div class="row" data-id="${t.id}">
           <button class="btn" data-a="done">סיימתי</button>
           <button class="btn alt" data-a="edit">ערוך</button>
           <button class="btn alt" data-a="focus">פוקוס 25 דק׳</button>
           <button class="btn alt" data-a="del">מחק</button>
         </div></div></div>`).join(''):'<div class="empty">אין משימות פתוחות. הוסיפו משימה כדי להתחיל.</div>';
-  if(!clear&&open.length>3)$('tasks').insertAdjacentHTML('beforeend',`<button class="btn alt" type="button" id="tgall" style="margin-top:6px">${showAll?'הצג רק את הבוערות':`הצג את כל המשימות (${open.length})`}</button>`);
+  if(open.length>3)$('tasks').insertAdjacentHTML('beforeend',`<button class="btn alt" type="button" id="tgall" style="margin-top:6px">${showAll?'הצג רק את הבוערות':`הצג את כל המשימות (${open.length})`}</button>`);
   renderChips();
 }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
@@ -368,10 +436,11 @@ $('f').addEventListener('submit',e=>{
   save();$('f').reset();$('e').value=30;$('sug').textContent='';xReset();setDef();$('addsec').classList.remove('open');render();
 });
 $('s').addEventListener('input',()=>{
-  const a=avg($('s').value.trim());
-  if(a){$('e').value=a;$('sug').textContent=`הערכה מותאמת: ${a} דקות, לפי המשימות האחרונות שלך ב${$('s').value.trim()}`}
-  else $('sug').textContent='';
+  const sub=$('s').value.trim(),a=avg(sub),n=(hist[sub]||[]).length;
+  $('sug').innerHTML=a&&n>=2?`לפי ${Math.min(n,5)} המשימות האחרונות שלך ב${esc(sub)}, משימה לוקחת בממוצע ${a} דקות. <button type="button" class="chip" id="sgapply" data-v="${a}">החל</button>`:'';
 });
+$('sug').addEventListener('click',e=>{if(e.target.id==='sgapply'){$('e').value=e.target.dataset.v;eTouched=true;if(!$('er').hidden)$('er').value=$('e').value}});
+$('xs').addEventListener('click',e=>{if(e.target.id==='xapply'&&xest){$('e').value=xest.min;eTouched=true;if(!$('er').hidden)$('er').value=xest.min}});
 $('tasks').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.id==='tgall'){showAll=!showAll;render();return}
@@ -388,13 +457,46 @@ $('tasks').addEventListener('click',async e=>{
   }
   save();render();
 });
-$('clear').onclick=()=>{clear=!clear;$('clear').textContent=clear?'חזרה לתצוגה מלאה':'מצב ריכוז';render()};
-$('theme').onclick=()=>{
-  const r=document.documentElement;
-  const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
-  r.dataset.theme=dark?'light':'dark';store.set('so_theme',r.dataset.theme);
+// ---- themes: light/dark mode, pastel palettes and a Hebrew font for each ----
+var PALS={
+  sage:{n:'מרווה',font:'',L:{bg:'#f6f4ef',card:'#fffdf9',ink:'#2b2f2c',mute:'#7d837e',line:'#e6e2d8',g:'#8fbf9f',y:'#e8c872',r:'#e29a8c',ac:'#6f9c86'},D:{bg:'#1c201e',card:'#252a27',ink:'#e9ece8',mute:'#98a09a',line:'#343b37',g:'#6fa282',y:'#c9a957',r:'#c77d6f',ac:'#8fbfa5'}},
+  ocean:{n:'ים',font:'Assistant',L:{bg:'#f1f5f8',card:'#fbfdff',ink:'#27323a',mute:'#75818a',line:'#dde5ea',g:'#8db9b0',y:'#e6cf8a',r:'#e19c93',ac:'#5f8fb0'},D:{bg:'#171d22',card:'#1f272d',ink:'#e6ecf0',mute:'#93a0a9',line:'#2f3a42',g:'#6aa399',y:'#c7ab62',r:'#c47d74',ac:'#86b4d3'}},
+  lavender:{n:'לבנדר',font:'Rubik',L:{bg:'#f5f3f8',card:'#fdfcff',ink:'#2e2b35',mute:'#80798a',line:'#e4dfec',g:'#9cc0a8',y:'#e6cb86',r:'#df9f98',ac:'#8a7bb5'},D:{bg:'#1d1b23',card:'#26232e',ink:'#ebe8f0',mute:'#9b95a6',line:'#37333f',g:'#72a584',y:'#c6a85a',r:'#c47f78',ac:'#ab9fd4'}},
+  peach:{n:'אפרסק',font:'Varela Round',L:{bg:'#faf3ee',card:'#fffcf9',ink:'#352d29',mute:'#8a7d75',line:'#eadfd6',g:'#9cc2a0',y:'#e9c883',r:'#e0958a',ac:'#d58a6a'},D:{bg:'#221c19',card:'#2c2420',ink:'#f0e9e4',mute:'#a39489',line:'#3c322c',g:'#76a47c',y:'#cba95a',r:'#c77a6e',ac:'#e0a083'}},
+  retro:{n:'רטרו 2000',font:'Pixelify Sans',stack:'"Pixelify Sans",Tahoma,"MS Sans Serif","Segoe UI",Arial,sans-serif',L:{bg:'#a8d8d4',card:'#d4d0c8',ink:'#111111',mute:'#4a4a4a',line:'#808080',g:'#58b368',y:'#f1d94c',r:'#e8625c',ac:'#0a246a',fld:'#ffffff',bvl:'#ffffff',bvd:'#404040',bvm:'#808080',tb1:'#0a246a',tb2:'#a6caf0'},D:{bg:'#0e2f2f',card:'#3b3b3b',ink:'#f2f2f2',mute:'#bdbdbd',line:'#6e6e6e',g:'#4f9f5d',y:'#d4bf3c',r:'#cc544e',ac:'#7aa7e0',fld:'#1b1b1b',bvl:'#707070',bvd:'#000000',bvm:'#1f1f1f',tb1:'#00004d',tb2:'#1f7acb'}},
+  rose:{n:'ורד',font:'Open Sans',L:{bg:'#f9f2f4',card:'#fffcfd',ink:'#342b2f',mute:'#867a7f',line:'#ecdfe3',g:'#9ac1a6',y:'#e8c986',r:'#dc9a9f',ac:'#c4808f'},D:{bg:'#201a1c',card:'#2a2225',ink:'#efe8ea',mute:'#a1959a',line:'#3b3135',g:'#74a483',y:'#c9a85c',r:'#c47a82',ac:'#dca0ad'}}
 };
-const th=store.get('so_theme',null);if(th)document.documentElement.dataset.theme=th;
+var FONTS_ON={};
+function loadFont(f){
+  if(!f||FONTS_ON[f])return;FONTS_ON[f]=1;
+  const l=document.createElement('link');l.rel='stylesheet';
+  l.href='https://fonts.googleapis.com/css2?family='+encodeURIComponent(f).replace(/%20/g,'+')+':wght@400;500;700&display=swap';
+  document.head.appendChild(l);
+}
+function resolvedDark(){const m=store.get('so_theme',null);return m?m==='dark':matchMedia('(prefers-color-scheme:dark)').matches}
+function applyTheme(){
+  const r=document.documentElement,m=store.get('so_theme',null),pk=PALS[store.get('so_pal','sage')]?store.get('so_pal','sage'):'sage',pal=PALS[pk],dark=resolvedDark();
+  if(m)r.dataset.theme=m;else delete r.dataset.theme;
+  r.dataset.pal=pk;['fld','bvl','bvd','bvm','tb1','tb2'].forEach(k=>r.style.removeProperty('--'+k));
+  const v=dark?pal.D:pal.L;Object.keys(v).forEach(k=>r.style.setProperty('--'+k,v[k]));
+  loadFont(pal.font);
+  r.style.setProperty('--font',pal.stack||(pal.font?`"${pal.font}",Heebo,sans-serif`:'Heebo,sans-serif'));
+  const mt=document.querySelector('meta[name=theme-color]');if(mt)mt.content=v.bg;
+}
+function renderTheme(){
+  const m=store.get('so_theme',null)||'',cur=store.get('so_pal','sage'),dark=resolvedDark();
+  Object.keys(PALS).forEach(k=>loadFont(PALS[k].font));
+  $('thb').innerHTML=`<b>מצב תצוגה</b><div class="seg" id="mseg">${[['','אוטומטי'],['light','בהיר'],['dark','כהה']].map(([v,l])=>`<button type="button" data-m="${v}"${m===v?' class="on"':''}>${l}</button>`).join('')}</div>
+<b style="margin-top:8px">ערכת נושא</b><div class="pals">${Object.keys(PALS).map(k=>{const p=PALS[k],c=dark?p.D:p.L;return `<button type="button" class="pal${k===cur?' on':''}" data-k="${k}" style="font-family:'${p.font||'Heebo'}',sans-serif"><span class="sw">${['ac','g','y','r'].map(x=>`<i style="background:${c[x]}"></i>`).join('')}</span><b>${p.n}</b><small>${p.font||'Heebo'}</small></button>`}).join('')}</div>
+<div class="hint">כל ערכה משנה את הצבעים ואת הגופן, ושומרת על אותו עיצוב נקי.</div>`;
+}
+$('thb').addEventListener('click',e=>{
+  const mb=e.target.closest('button[data-m]'),pb=e.target.closest('button[data-k]');
+  if(mb){store.set('so_theme',mb.dataset.m||null);applyTheme();renderTheme()}
+  else if(pb){store.set('so_pal',pb.dataset.k);applyTheme();renderTheme()}
+});
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{if(!store.get('so_theme',null)){applyTheme();if(pgOpen==='set'&&setView==='theme')renderTheme()}});
+applyTheme();
 
 // Date & time entry: responsive day strip + typed 24h time
 const pad=n=>String(n).padStart(2,'0');
@@ -589,7 +691,7 @@ function renderEv(){
     }
     up.push({title:e.title,d,label:'',k:kindOf(e)});
   });
-  $('evsec').hidden=clear||!up.length;
+  $('evsec').hidden=!up.length;
   $('ev').innerHTML=up.map(x=>`<div class="ev"><span>${KTAG[x.k]?`<em class="ktag t-${x.k}">${KTAG[x.k]}</em> `:''}${esc(x.title)}</span><span class="meta">${x.label||x.d.toLocaleDateString('he-IL',{weekday:'short',day:'numeric',month:'numeric'})}</span></div>`).join('');
   $('evl').innerHTML=evsHTML();
 }
@@ -637,7 +739,7 @@ function tick(){
   });
   tasks.filter(t=>!t.done&&!t.del).forEach(t=>{
     const hrs=(new Date(t.due)-now)/36e5;
-    if(hrs>0&&hrs<=cfg.dl+t.est/60)fire('d'+t.id+t.due,t.name,`ההגשה בעוד ${hrs<1?Math.round(hrs*60)+' דקות':Math.round(hrs)+' שעות'}. צפוי לקחת ${avg(t.sub)||t.est} דקות`);
+    if(hrs>0&&hrs<=cfg.dl+t.est/60)fire('d'+t.id+t.due,t.name,`ההגשה בעוד ${hrs<1?Math.round(hrs*60)+' דקות':Math.round(hrs)+' שעות'}. צפוי לקחת ${t.est} דקות`);
   });
 }
 nstat();setInterval(tick,30000);tick();
@@ -653,29 +755,6 @@ function streakUI(){const hr=new Date().getHours();{const nm=store.get('so_name'
   while(days[iso(d)]){n++;d.setDate(d.getDate()-1)}
   if(n)$('date').textContent+=` · רצף של ${n} ימים`;
 }
-function renderWeek(){
-  const since=Date.now()-7*864e5,done=tasks.filter(t=>t.done&&t.doneAt>=since&&t.act);
-  const by={};done.forEach(t=>{const o=by[t.sub]=by[t.sub]||{a:0,e:0};o.a+=t.act;o.e+=t.est});
-  const subs=Object.keys(by).map(k=>({k,a:by[k].a,e:by[k].e,r:by[k].a/by[k].e})).sort((x,y)=>y.r-x.r);
-  const gw=grades.filter(g=>g.t>=since),recs=[];
-  if(!done.length){$('wk').innerHTML='<div class="empty">עדיין אין נתונים לשבוע הזה. סיימו כמה משימות והסיכום יתמלא.</div>';}
-  else{
-    const hard=subs[0].r>1.15?`<div><b>במה התקשיתי:</b> ${esc(subs[0].k)}, לקח פי ${subs[0].r.toFixed(1)} מהמתוכנן</div>`:'<div><b>במה התקשיתי:</b> בשבוע הזה עמדת בהערכות הזמן.</div>';
-    subs.filter(x=>x.r>1.25).forEach(x=>recs.push(`כדאי להקצות ל${esc(x.k)} יותר זמן, בפועל זה לוקח פי ${x.r.toFixed(1)}.`));
-    const m30=Date.now()-30*864e5,hardCnt={};
-    grades.filter(g=>g.t>=m30&&g.f==='קשה').forEach(g=>hardCnt[g.s]=(hardCnt[g.s]||0)+1);
-    Object.keys(hardCnt).filter(k=>hardCnt[k]>=2).forEach(k=>recs.push(`מומלץ להתחיל להתכונן ל${esc(k)} 3 ימים מראש.`));
-    {const ft=fbInsights();if(ft&&ft.tips.length)recs.push(ft.tips[0])}
-    $('wk').innerHTML=`<div>${store.get('so_name','')?esc(store.get('so_name',''))+', ':''}<b>${done.length}</b> משימות הושלמו, ${Math.round(done.reduce((x,t)=>x+t.act,0)/6)/10} שעות עבודה</div>`+hard+
-      subs.map(x=>`<div><div class="meta">${esc(x.k)}: ${x.a} דק׳ בפועל, ${x.e} מתוכננות</div><div class="trk"><i style="width:${Math.min(100,x.r*50)}%;background:${x.r>1.25?'var(--r)':'var(--g)'}"></i></div></div>`).join('')+
-      (gw.length?`<div><b>ציונים:</b> ${gw.map(g=>`${esc(g.s)} ${g.g} (${g.f})`).join(', ')}</div>`:'')+
-      `<div><b>לשבוע הבא:</b> ${recs.length?recs.join(' '):'ממשיכים באותו קצב.'}</div>`;
-  }
-}
-$('gb').onclick=()=>{
-  const s=$('gs').value.trim(),g=+$('gg').value;if(!s||!$('gg').value)return;
-  grades.push({s,g,f:$('gf').value,t:Date.now()});store.set('so_gr',grades);$('gg').value='';renderWeek();
-};
 function pomUI(){
   const el=$('pom');
   if(!pom){el.hidden=true;return}
@@ -715,20 +794,38 @@ $('pick').addEventListener('change',e=>{
   mine=e.target.checked?[...new Set([...mine,k])]:mine.filter(x=>x!==k);
   store.set('so_mine',mine);rebuildSched();
 });
-$('pick').addEventListener('click',e=>{if(e.target.id==='pdone'){store.set('so_picked',true);bannerUI();$('st').open=false}});
+$('pick').addEventListener('click',e=>{if(e.target.id==='pdone'){store.set('so_picked',true);bannerUI()}});
 async function sync(manual){
   const c=$('cls').value.trim();if(!c)return;
   if(manual)$('sym').textContent='מושך את המערכת…';
   try{
-    const r=await fetch('/api/timetable?class='+encodeURIComponent(c));
+    const r=await fetch('/api/timetable?class='+encodeURIComponent(c)+'&_='+Math.floor(Date.now()/3e5));
     if(!r.ok)throw 0;const w=await r.json();if(!w.lessons||!w.lessons.length)throw 0;
-    week=w;store.set('so_week',week);store.set('so_cls',c);store.set('so_sync',Date.now());
-    renderPick();rebuildSched();bannerUI();
+    week=w;synErr=0;store.set('so_week',week);store.set('so_cls',c);store.set('so_sync',Date.now());
+    renderPick();rebuildSched();bannerUI();synUI();
     if(manual)$('sym').textContent=`עודכן: ${week.lessons.length} שיעורים`;
-  }catch(err){if(manual)$('sym').textContent='הסנכרון נכשל. בדקו את שם הכיתה או נסו שוב.'}
+  }catch(err){synErr=Date.now();synUI();if(manual)$('sym').textContent='הסנכרון נכשל. בדקו את שם הכיתה או נסו שוב.'}
 }
 $('sy').onclick=()=>sync(true);
-if(Date.now()-store.get('so_sync',0)>36e5)sync(false);
+// the school timetable (cancellations and changes) is refreshed whenever the app is opened or returns to the foreground, and every 5 minutes while it is open
+var synErr=0;
+function maybeSync(force){
+  if(document.hidden||(navigator.onLine===false))return;
+  if(force||Date.now()-store.get('so_sync',0)>5*6e4)sync(false);
+}
+function synUI(){
+  const box=$('syn');
+  if(!week){box.hidden=true;return}
+  const m=Math.max(0,Math.round((Date.now()-store.get('so_sync',0))/6e4));
+  const ago=m<1?'עכשיו':m<60?`לפני ${m} דקות`:m<1440?`לפני ${Math.floor(m/60)} שעות`:'לפני יותר מיום';
+  box.hidden=false;
+  box.innerHTML=`<span>${synErr?'הרענון האחרון נכשל. מוצג מידע מ'+ago:'שינויים וביטולים עודכנו '+ago}</span><button class="ghost" type="button" id="synb">רענון</button>`;
+}
+$('syn').addEventListener('click',async e=>{if(e.target.id!=='synb')return;$('synb').textContent='מרענן...';await sync(true);synUI()});
+document.addEventListener('visibilitychange',()=>maybeSync());
+addEventListener('online',()=>maybeSync(true));
+setInterval(()=>maybeSync(),5*6e4);
+maybeSync();
 renderPick();
 function nextLesson(sub){
   if(!week)return null;let best=null;const ms=new Set(mine||[]);
@@ -751,11 +848,11 @@ $('s').addEventListener('change',()=>{
 function bannerUI(){
   const first=!week&&!store.get('so_cls','');
   const need=!!week&&!store.get('so_picked',false);
-  $('pbn').hidden=clear||!(first||need);
+  $('pbn').hidden=!(first||need);
   if(first)$('pbn').innerHTML='<div style="flex:1"><b>ברוכים הבאים</b><div class="meta">בחרו כיתה כדי למשוך את המערכת מבית הספר.</div></div><button class="btn" id="pgo">התחלה</button>';
   else if(need)$('pbn').innerHTML='<div style="flex:1"><b>בחרו את השיעורים שלכם</b><div class="meta">פעם אחת, וזה נשמר. אפשר לשנות בהגדרות.</div></div><button class="btn" id="pgo">בחירה</button>';
 }
-$('pbn').addEventListener('click',e=>{if(e.target.id==='pgo'){const d=$('st');d.open=true;d.scrollIntoView({behavior:'smooth'});if(!week)$('cls').focus()}});
+$('pbn').addEventListener('click',e=>{if(e.target.id==='pgo'){openSettings('sched');if(!week)setTimeout(()=>$('cls').focus(),60)}});
 $('fab').onclick=()=>{const a=$('addsec');if(a.classList.contains('open')){closeSheet();return}if(editId)cancelEdit();a.classList.add('open');buildStrip();$('n').focus()};
 $('cx').onclick=closeSheet;
 function todayNotes(){
@@ -792,7 +889,7 @@ function pushSync(delay){
       await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         subscription:sub.toJSON(),cls:$('cls').value.trim(),mine:mine||[],
         cfg:{morning:cfg.morning,lesson:cfg.lesson,dl:cfg.dl,name:store.get('so_name',''),off:offList(),xe:cfg.xe||'',exams:examList()},
-        tasks:tasks.filter(t=>!t.done&&!t.del).map(t=>({id:t.id,name:t.name,sub:t.sub,est:avg(t.sub)||t.est,due:t.due}))
+        tasks:tasks.filter(t=>!t.done&&!t.del).map(t=>({id:t.id,name:t.name,sub:t.sub,est:t.est,due:t.due}))
       })});
     }catch(e){}
   },delay===0?0:1500);
@@ -803,7 +900,7 @@ function askMin(t){
     const d=$('dlg');
     $('dlt').textContent=t.name;
     $('dlc').innerHTML=[15,30,45,60,90,120].map(x=>`<button type="button" class="chip" data-m="${x}">${x>=60&&x%60===0?x/60+' ש׳':x+' דק׳'}</button>`).join('');
-    $('dli').value=avg(t.sub)||t.est;
+    $('dli').value=t.est;
     const done=v=>{d.close();res(v)};
     $('dlc').onclick=e=>{const b=e.target.closest('button');if(b)done(b.dataset.m)};
     $('dlok').onclick=()=>done($('dli').value);
@@ -1052,8 +1149,7 @@ function heatWord(h){return h===null?'אין עדיין נתונים':h<0.35?'ה
 function subLine(x){const L=[];if(x.ratio!==null)L.push(`זמן בפועל פי ${x.ratio.toFixed(1)}`);if(x.avgG!==null)L.push(`ממוצע ${Math.round(x.avgG)}`);if(x.att)L.push(`היעדרות ${Math.round(x.att.pct)}%`);return L.join(' · ')}
 function renderProf(){
   const P=profBuild(),nm=store.get('so_name',''),conf=P.N<5?'הפרופיל רק מתחיל ללמוד אותך':P.N<15?'התמונה מתחילה להתבהר':'הפרופיל מבוסס על הרבה נתונים';
-  $('ppb').innerHTML=`<button class="ghost" type="button" data-a="back">› חזרה</button>
-<h1 class="sph">${nm?'הפרופיל של '+esc(nm):'הפרופיל שלי'}</h1><div class="meta">נבנה לבד מהמשימות, הציונים וההיעדרויות שאתה מזין. אין צורך להזין אותו.</div>
+  $('meb').innerHTML=`<h1 class="sph">${nm?'הפרופיל של '+esc(nm):'הפרופיל שלי'}</h1><div class="meta">נבנה לבד מהמשימות, הציונים וההיעדרויות שאתה מזין. אין צורך להזין אותו.</div>
 <section class="spc"><h2 class="spt">במבט אחד</h2>${P.outs.map(o=>`<div class="oc"><span class="ktag t-${o.tag}">${o.lab}</span><span>${esc(o.txt)}</span></div>`).join('')}</section>
 <section class="spc"><h2 class="spt">הרגלי עבודה</h2>${P.sig.map(g=>`<div class="hab"><div class="hh"><b style="font-weight:500">${esc(g.name)}</b><span class="meta">${g.v===null?'אין עדיין מספיק נתונים':Math.round(g.v*100)+'%'}</span></div><div class="trk"><i style="width:${g.v===null?0:Math.round(g.v*100)}%;background:var(--ac)"></i></div><div class="meta" style="margin-top:6px">${esc(g.txt)}</div></div>`).join('')}</section>
 <section class="spc"><h2 class="spt">אחרי מבחנים</h2>${fbProfHTML()}</section>
@@ -1061,19 +1157,67 @@ function renderProf(){
 <div class="meta" style="margin-top:14px">${P.N} נקודות מידע נאספו. ${conf}. הפרופיל מתעדכן לבד.</div>`;
 }
 
-// ---- page navigation (subject page and profile are full pages, back button works) ----
+// ---- navigation: three swipeable panels, plus full pages (subject, settings) ----
+var pnIdx=0,setView=null,SETT={notif:'התראות וסנכרון',sched:'מערכת ואירועים',prof:'פרופיל ופרטיות',theme:'עיצוב וערכות נושא'};
+function showPanel(i){
+  pnIdx=Math.max(0,Math.min(2,i));
+  [0,1,2].forEach(k=>{$('pn'+k).classList.toggle('on',k===pnIdx);const t=$('tabs').children[k];t.classList.toggle('on',k===pnIdx);t.setAttribute('aria-current',k===pnIdx?'page':'false')});
+  $('fab').hidden=pnIdx===2;
+  if(pnIdx===2)renderProf();
+  window.scrollTo(0,0);
+}
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-p]');if(b)showPanel(+b.dataset.p)});
+{
+  let sx=0,sy=0,ok=false;
+  $('panels').addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;ok=e.touches.length===1&&!e.target.closest('#cal,.strip,textarea,input,select,.prl')},{passive:true});
+  $('panels').addEventListener('touchend',e=>{
+    if(!ok||$('addsec').classList.contains('open'))return;
+    const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6)showPanel(pnIdx+(dx>0?1:-1)); // swipe right = next panel (RTL)
+  },{passive:true});
+}
+$('dseg').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-v]');if(!b)return;
+  document.body.classList.toggle('calmode',b.dataset.v==='cal');
+  [...$('dseg').children].forEach(x=>x.classList.toggle('on',x===b));
+  renderCal();window.scrollTo(0,0);
+});
+function renderSubs(){
+  const subs=allSubjects().sort();
+  $('subsec').hidden=!subs.length;
+  $('sublist').innerHTML=subs.map(x=>{
+    const w=subTemplate(x).reduce((a,b)=>a+b,0),a=att[x]?attInfo(x):null;
+    return `<button class="srow" type="button" data-s="${esc(x)}"><span class="grow"><b style="font-weight:500">${esc(x)}</b><div class="meta">${w?w+' שעות בשבוע':'לא במערכת'}${a&&a.ok?' · היעדרות '+Math.round(a.pct*10)/10+'%':''}</div></span><span class="meta">‹</span></button>`;
+  }).join('');
+}
+$('sublist').addEventListener('click',e=>{const b=e.target.closest('.srow[data-s]');if(b)openSubj(b.dataset.s,'')});
 function openPage(kind){
   const was=pgOpen;pgOpen=kind;
-  document.body.classList.toggle('subjmode',kind==='subj');document.body.classList.toggle('profmode',kind==='prof');
-  $('spage').hidden=kind!=='subj';$('ppage').hidden=kind!=='prof';window.scrollTo(0,0);
+  document.body.classList.toggle('subjmode',kind==='subj');document.body.classList.toggle('setmode',kind==='set');document.body.classList.toggle('frmode',kind==='fr');
+  $('spage').hidden=kind!=='subj';$('setpage').hidden=kind!=='set';$('fpage').hidden=kind!=='fr';window.scrollTo(0,0);
   if(!was){try{history.pushState({pg:1},'');pgPushed=true}catch(e){pgPushed=false}}
 }
-function closePage(){pgOpen=null;document.body.classList.remove('subjmode','profmode');$('spage').hidden=true;$('ppage').hidden=true;render()}
+function closePage(){pgOpen=null;document.body.classList.remove('subjmode','setmode','frmode');$('spage').hidden=true;$('setpage').hidden=true;$('fpage').hidden=true;render()}
 function backPage(){if(pgPushed){pgPushed=false;try{history.back();return}catch(e){}}closePage()}
 function openSubj(sub,teacher){spSub=sub;spTeacher=teacher||'';spRender();openPage('subj')}
+function setRender(){
+  $('sidx').hidden=!!setView;
+  document.querySelectorAll('#setpage .setp').forEach(d=>{d.hidden=d.dataset.p!==setView});
+  $('sttl').textContent=setView?SETT[setView]:'הגדרות';
+  $('sbk').textContent=setView?'› חזרה להגדרות':'› חזרה';
+  if(setView==='theme')renderTheme();
+  window.scrollTo(0,0);
+}
+function openSettings(v){setView=v||null;setRender();if(pgOpen!=='set')openPage('set')}
+$('setb').onclick=()=>openSettings();
+$('setpage').addEventListener('click',e=>{
+  const r=e.target.closest('.srow[data-v]');if(r){setView=r.dataset.v;setRender();return}
+  if(e.target.closest('#sbk')){if(setView){setView=null;setRender()}else backPage()}
+});
 addEventListener('popstate',()=>{if(pgOpen){pgPushed=false;closePage()}});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&pgOpen)backPage()});
-$('profb').onclick=()=>{renderProf();openPage('prof')};
+{const pv=store.get('so_priv',{});$('gh1').checked=!!pv.ghost;$('gh2').checked=!!pv.hide;
+ ['gh1','gh2'].forEach(i=>$(i).addEventListener('change',()=>store.set('so_priv',{ghost:$('gh1').checked,hide:$('gh2').checked})))}
 $('spb').addEventListener('change',e=>{
   const id=e.target.id;if(id!=='sptot'&&id!=='spab')return;
   const a=att[spSub]=att[spSub]||{total:0,abs:0},v=Math.max(0,Math.round(+e.target.value||0));
@@ -1093,7 +1237,7 @@ $('spb').addEventListener('click',e=>{
   a.abs=Math.max(0,(+a.abs||0)+(k==='p'?1:-1));
   store.set('so_att',att);spRender();
 });
-$('ppb').addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;if(b.dataset.a==='back')backPage();else if(b.dataset.a==='osub')openSubj(b.dataset.s,'')});
+$('meb').addEventListener('click',e=>{const b=e.target.closest('button[data-a="osub"]');if(b)openSubj(b.dataset.s,'')});
 $('lessons').addEventListener('click',e=>{const l=e.target.closest('.lesson[data-sub]');if(l)openSubj(l.dataset.sub,l.dataset.t)});
 $('lessons').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const l=e.target.closest('.lesson[data-sub]');if(l){e.preventDefault();openSubj(l.dataset.sub,l.dataset.t)}});
 // school-year range (used for the automatic planned hours)
@@ -1146,7 +1290,7 @@ function fbRender(e){
 }
 function fbUI(){
   const p=fbPending(),box=$('fbc');
-  if(!p||clear){box.hidden=true;fbShown=null;return}
+  if(!p){box.hidden=true;fbShown=null;return}
   box.hidden=false;
   const k=examKey(p.e);
   if(fbShown!==k){fbShown=k;fbDraft={tm:0,st:0,df:[]};fbRender(p.e)}
@@ -1288,7 +1432,7 @@ function estimateTask(sub,f){
   const parts=[];let min=0,n=0;
   if(f.ex){const u=unit('ex');min+=f.ex*u.u;n=Math.max(n,u.n);parts.push(`${f.ex} תרגילים × ${Math.round(u.u*10)/10} דק׳`)}
   if(f.pg){const u=unit('pg');min+=f.pg*u.u;n=Math.max(n,u.n);parts.push(`${f.pg} עמודים × ${Math.round(u.u*10)/10} דק׳`)}
-  min=Math.max(5,Math.round(min/5)*5);
+  min=Math.max(1,Math.round(min));
   const basis=n?`לפי ${n} משימות שסיימת ב${sub}, ככל שהן דומות ועדכניות הן משפיעות יותר`:'הערכת פתיחה: עוד אין משימות דומות שסיימת, והיא תתעדכן אחרי שתזין זמן בפועל';
   return {min,n,expl:`${parts.join(' + ')}. ${basis}.`};
 }
@@ -1317,8 +1461,7 @@ function xRefresh(){
   $('xo').hidden=false;
   if(f.ex||f.pg){
     xest=estimateTask(sub,f);
-    h+=`<br>הערכה: ${hm(xest.min)}. ${esc(xest.expl)}`;
-    if(!eTouched)$('e').value=xest.min;
+    h+=xest.n>=2?`<br>הצעת האפליקציה: ${hm(xest.min)}. ${esc(xest.expl)} <button type="button" class="chip" id="xapply">החל</button>`:'<br>עוד אין מספיק משימות שסיימת כדי להציע הערכה, ולכן ההערכה שלך היא שקובעת.';
     const er=$('er');er.hidden=false;er.max=Math.max(240,Math.ceil(Math.max(xest.min,+$('e').value)*2/60)*60);er.value=$('e').value;
   }else $('er').hidden=true;
   box.innerHTML=h;
@@ -1329,6 +1472,130 @@ $('td').addEventListener('input',()=>{xOvr=false;xRefresh()});
 $('s').addEventListener('input',xRefresh);
 $('e').addEventListener('input',()=>{eTouched=true;if(!$('er').hidden)$('er').value=$('e').value});
 $('er').addEventListener('input',()=>{eTouched=true;$('e').value=$('er').value});
+
+// ---- friends: who is free right now (needs /api/friends and the tables in friends.sql) ----
+var fr=store.get('so_fr',null),frData=null,frErr='',frMsg='',frAdd='',frPushT=0,frPushAt=0,frDrop=false,frBusy=false;
+function frApi(action,body){
+  if(window.__FR_MOCK)return window.__FR_MOCK(action,body);
+  return fetch('/api/friends',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,...body})})
+    .then(async r=>{const j=await r.json().catch(()=>({}));if(!r.ok)throw j;return j});
+}
+function frFmt(f){return f.slice(0,4)+'-'+f.slice(4)}
+function frLink(){return location.origin+location.pathname+'?add='+fr.fid}
+function frErrText(e){
+  const c=e&&e.error;
+  return c==='not_found'?'לא נמצא משתמש עם הקוד הזה.':c==='self'?'זה הקוד שלך.':c==='bad code'?'הקוד צריך להכיל 8 תווים.':c==='auth'?'החיבור לחברים נותק. אפשר להפעיל מחדש.':'לא הצלחתי להתחבר לשרת. נסה שוב בעוד רגע.';
+}
+// what friends may see: only the next 7 days of lessons (cancellations included), no tasks, grades or names of events
+function buildSnap(){
+  buildOff();
+  const out={v:1,days:{}},t0=new Date();t0.setHours(12,0,0,0);
+  for(let i=0;i<7;i++){
+    const d=addD(t0,i),k=iso(d),off=!!offMap[k],day={};
+    if(off)day.off=1;
+    day.les=off?[]:dayLessons(d.getDay(),wkOk(d)).filter(l=>l.start).map(l=>({s:l.start,e:l.end||'',sub:l.subject,t:l.teacher||'',r:l.room||'',st:l.status==='cancel'?'cancel':l.status==='special'?'special':l.status==='exam'?'exam':''}));
+    day.ev=evs.filter(e=>e.date===k&&e.time&&TIMEK.includes(kindOf(e))&&!isOff(e)).map(e=>({k:kindOf(e),s:e.time}));
+    out.days[k]=day;
+  }
+  return out;
+}
+function frPushSoon(){if(!fr)return;clearTimeout(frPushT);frPushT=setTimeout(frPush,4000)}
+async function frPush(){
+  if(!fr)return;
+  if(Date.now()-frPushAt<20000){frPushSoon();return}
+  frPushAt=Date.now();
+  const pv=store.get('so_priv',{});
+  try{await frApi('me',{fid:fr.fid,secret:fr.secret,name:store.get('so_name',''),ghost:!!pv.ghost,hide:!!pv.hide,snap:buildSnap()})}catch(e){}
+}
+async function frLoad(){
+  if(!fr)return;
+  try{frData=await frApi('list',{fid:fr.fid,secret:fr.secret});frErr=''}catch(e){frErr=frErrText(e)}
+  if(pgOpen==='fr')frRender();
+}
+var FST={free:['חופשי','t-free'],class:['בשיעור','t-fclass'],event:['בפעילות','t-fevent'],ghost:['לא זמין','t-fghost'],unknown:['לא ידוע','t-fghost']};
+function wdName(d){return new Date(d+'T12:00').toLocaleDateString('he-IL',{weekday:'long'}).replace('יום ','')}
+function frRows(list,btns){return list.map(x=>`<div class="frow"><div class="grow" style="flex:1"><b style="font-weight:500">${esc(x.name)}</b></div>${btns(x)}</div>`).join('')}
+function frRender(){
+  const b=$('fpb'),back='<button class="ghost" type="button" data-a="back">› חזרה</button>',msg=frMsg?`<div class="hint">${esc(frMsg)}</div>`:'';
+  if(!fr){
+    b.innerHTML=back+`<h1 class="sph">חברים</h1><div class="meta">מי חופשי עכשיו? רואים אחד את השני רק אחרי שמאשרים הדדית.</div>
+<section class="spc"><h2 class="spt">איך זה עובד</h2>
+<div class="hab">כל אחד מקבל קוד אישי ושולח אותו לחברים, בוואטסאפ למשל.</div>
+<div class="hab">חבר רואה אם אתה חופשי, בשיעור או בפעילות, רק אחרי ששניכם אישרתם.</div>
+<div class="hab">נשלח רק הלו"ז של 7 הימים הקרובים. לא משימות, לא ציונים ולא נוכחות.</div>
+<div class="hab">אפשר להסתיר את שם המקצוע והכיתה, או להיות בלתי נראה, בהגדרות פרופיל ופרטיות.</div></section>
+${frAdd?`<div class="atm">הוזמנת להוסיף חבר (קוד ${frFmt(frAdd)}). אחרי ההפעלה אפשר לשלוח לו בקשה.</div>`:''}
+<section class="spc"><label for="frn">איך החברים יראו אותך?</label><input id="frn" maxlength="20" placeholder="השם שלך" value="${esc(store.get('so_name',''))}"><div class="row" style="margin-top:12px"><button class="btn" type="button" data-a="frstart">הפעלת חברים</button></div>${msg}</section>`;
+    return;
+  }
+  const D=frData,inc=D?D.incoming:[],out=D?D.outgoing:[],blk=D?D.blocked:[],fr0=D?D.friends:[];
+  b.innerHTML=back+`<h1 class="sph">חברים</h1>
+${frErr?`<div class="atm">${esc(frErr)}</div>`:''}
+${frAdd?`<section class="spc"><b style="font-weight:500">הוזמנת להוסיף חבר</b><div class="meta">קוד ${frFmt(frAdd)}</div><div class="row" style="margin-top:10px"><button class="btn" type="button" data-a="fradd" data-f="${esc(frAdd)}">שלח בקשה</button><button class="btn alt" type="button" data-a="frskip">התעלם</button></div></section>`:''}
+<section class="spc"><h2 class="spt">עכשיו</h2>
+${!D&&!frErr?'<div class="meta">טוען...</div>':fr0.length?fr0.map(f=>{
+  const st=f.status,tag=st.state==='event'&&/מבחן/.test(st.text)?['במבחן','t-fevent']:FST[st.state]||FST.unknown;
+  const byDay={};f.overlap.forEach(o=>(byDay[o.d]=byDay[o.d]||[]).push(o.s+'-'+o.e));
+  const ov=Object.keys(byDay).map(k=>`<div class="fov"><b style="font-weight:500">${wdName(k)}</b> ${byDay[k].join(', ')}</div>`).join('');
+  return `<div class="frow"><i class="fdot f-${st.state}"></i><div class="grow" style="flex:1"><b style="font-weight:500">${esc(f.name)}</b> <em class="ktag ${tag[1]}">${tag[0]}</em><div class="meta">${esc(st.text)}</div>
+<details><summary class="meta" style="cursor:pointer">${ov?'חלונות משותפים ('+f.overlap.length+')':'אפשרויות'}</summary>${ov||(st.state==='ghost'?'':'<div class="meta">אין השבוע חלון חופשי משותף.</div>')}<div class="row" style="margin-top:8px"><button class="btn alt" type="button" data-a="frdel" data-f="${esc(f.fid)}">הסר חבר</button><button class="btn alt" type="button" data-a="frblock" data-f="${esc(f.fid)}">חסום</button></div></details></div></div>`}).join(''):'<div class="empty">עוד אין חברים. שלח את הקוד שלך, או הוסף חבר לפי קוד.</div>'}
+<div class="meta" style="margin-top:10px">מתעדכן כל דקה. <button class="ghost" type="button" data-a="frrefresh">רענון</button></div></section>
+${inc.length?`<section class="spc"><h2 class="spt">בקשות חברות</h2>${frRows(inc,x=>`<div class="row"><button class="btn" type="button" data-a="fracc" data-f="${esc(x.fid)}">אשר</button><button class="btn alt" type="button" data-a="frdec" data-f="${esc(x.fid)}">דחה</button><button class="btn alt" type="button" data-a="frblk" data-f="${esc(x.fid)}">חסום</button></div>`)}</section>`:''}
+<section class="spc"><h2 class="spt">הקוד שלך</h2><div class="frcode">${frFmt(fr.fid)}</div>
+<div class="row"><button class="btn" type="button" data-a="frwa">שלח בוואטסאפ</button><button class="btn alt" type="button" data-a="frcopy">העתק קישור</button></div></section>
+<section class="spc"><h2 class="spt">הוספת חבר לפי קוד</h2><input id="fra" placeholder="קוד חבר" maxlength="9" autocomplete="off" style="direction:ltr;text-transform:uppercase"><div class="row" style="margin-top:10px"><button class="btn" type="button" data-a="fradd">שלח בקשה</button></div>${msg}</section>
+${out.length?`<section class="spc"><h2 class="spt">בקשות שנשלחו</h2>${frRows(out,x=>`<button class="btn alt" type="button" data-a="frdel" data-f="${esc(x.fid)}">בטל</button>`)}</section>`:''}
+${blk.length?`<section class="spc"><h2 class="spt">חסומים</h2>${frRows(blk,x=>`<button class="btn alt" type="button" data-a="frdel" data-f="${esc(x.fid)}">בטל חסימה</button>`)}</section>`:''}
+<section class="spc"><h2 class="spt">פרטיות</h2><div class="meta">מצב בלתי נראה והסתרת פרטים נמצאים בהגדרות, תחת פרופיל ופרטיות.</div>
+<div class="row" style="margin-top:10px"><button class="btn alt" type="button" data-a="frdrop">${frDrop?'לחץ שוב כדי למחוק הכול':'הפסק להשתתף ומחק את הנתונים שלי'}</button></div></section>`;
+}
+$('fpb').addEventListener('click',async e=>{
+  const bt=e.target.closest('button[data-a]');if(!bt||frBusy)return;
+  const a=bt.dataset.a,f=bt.dataset.f,auth={fid:fr&&fr.fid,secret:fr&&fr.secret};
+  if(a==='back'){backPage();return}
+  if(a==='frcopy'){try{await navigator.clipboard.writeText(frLink());frMsg='הקישור הועתק.'}catch(x){frMsg='לא הצלחתי להעתיק. הקוד שלך: '+frFmt(fr.fid)}frRender();return}
+  if(a==='frwa'){window.open('https://wa.me/?text='+encodeURIComponent('בוא נוסיף אחד את השני ב-StudentOS ונראה מי חופשי: '+frLink()),'_blank','noopener');return}
+  if(a==='frskip'){frAdd='';frRender();return}
+  if(a==='frrefresh'){await frLoad();return}
+  frBusy=true;
+  try{
+    if(a==='frstart'){
+      const name=$('frn').value.trim();
+      if(!name){frMsg='כתוב איך החברים יראו אותך.';frRender();return}
+      store.set('so_name',name);
+      const r=await frApi('register',{name});fr={fid:r.fid,secret:r.secret};store.set('so_fr',fr);frMsg='';
+      frPushAt=0;frPush();await frLoad();frRender();return;
+    }
+    if(a==='fradd'){
+      const code=(f||($('fra')&&$('fra').value)||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if(code.length!==8){frMsg='הקוד צריך להכיל 8 תווים.';frRender();return}
+      const r=await frApi('request',{...auth,to:code});
+      frMsg=r.state==='accepted'?'אושר. החבר נוסף.':'הבקשה נשלחה. כשהחבר יאשר, הוא יופיע כאן.';
+      frAdd='';await frLoad();frRender();return;
+    }
+    if(a==='fracc'||a==='frdec'||a==='frblk'){await frApi('respond',{...auth,from:f,decision:a==='fracc'?'accept':a==='frdec'?'decline':'block'});frMsg='';await frLoad();return}
+    if(a==='frblock'){await frApi('block',{...auth,other:f});await frLoad();return}
+    if(a==='frdel'){await frApi('remove',{...auth,other:f});await frLoad();return}
+    if(a==='frdrop'){
+      if(!frDrop){frDrop=true;frRender();return}
+      await frApi('drop',auth);fr=null;store.set('so_fr',null);frData=null;frDrop=false;frMsg='';frRender();return;
+    }
+  }catch(x){frMsg=frErrText(x);frRender()}
+  finally{frBusy=false}
+});
+function openFriends(){frMsg='';frDrop=false;frRender();openPage('fr');if(fr)frLoad()}
+$('frb').onclick=openFriends;
+setInterval(()=>{if(pgOpen==='fr'&&!document.hidden)frLoad()},60000);
+setInterval(()=>{if(fr&&!document.hidden)frPush()},30*6e4);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(pgOpen==='fr')frLoad();frPushSoon()}});
+// a friend's invitation link opens this screen with their code ready
+{const q=new URLSearchParams(location.search).get('add');
+ if(q){frAdd=q.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);try{history.replaceState(null,'',location.pathname)}catch(e){};setTimeout(openFriends,400)}}
+// keep the shared snapshot fresh whenever the schedule, events, name or privacy change
+{const _ps=pushSync;pushSync=function(){frPushSoon();return _ps.apply(this,arguments)}}
+$('nmn').addEventListener('change',frPushSoon);
+['gh1','gh2'].forEach(i=>$(i).addEventListener('change',frPushSoon));
+if(fr)setTimeout(frPush,3000);
 
 // ---- evening switch: from the set hour the main screen shows the next school day ----
 var evView=null; // 'today' when the person asked to keep seeing today
@@ -1476,7 +1743,6 @@ $('cseg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)
 $('cbody').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(!b)return;calV='day';calD=new Date(b.dataset.d+'T00:00');renderCal()});
 $('cp').onclick=()=>navCal(-1);$('cnx').onclick=()=>navCal(1);
 $('ctd').onclick=()=>{calD=new Date();calD.setHours(0,0,0,0);renderCal()};
-$('calb').onclick=()=>{const on=document.body.classList.toggle('calmode');$('calb').textContent=on?'חזרה':'יומן';renderCal();scrollTo(0,0)};
 
 // ---- edit tasks ----
 let editId=null;
