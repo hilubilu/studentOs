@@ -29,5 +29,43 @@
    "type": "image/png",
    "purpose": "maskable"
   }
+ ],
+ "shortcuts": [
+  {
+   "name": "עכשיו: השיעור הבא והמשימות",
+   "short_name": "עכשיו",
+   "url": "/?go=widget",
+   "icons": [
+    {
+     "src": "/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "המשימות שלי",
+   "short_name": "משימות",
+   "url": "/?go=tasks",
+   "icons": [
+    {
+     "src": "/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "התחל פוקוס על המשימה הבוערת",
+   "short_name": "פוקוס",
+   "url": "/?go=focus",
+   "icons": [
+    {
+     "src": "/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  }
  ]
 }

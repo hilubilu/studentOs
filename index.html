@@ -145,6 +145,7 @@ input[type=checkbox]{width:auto;accent-color:var(--ac)}
 body.subjmode main>:not(#spage),body.subjmode #fab,body.subjmode #tabs{display:none!important}
 body.setmode main>:not(#setpage),body.setmode #fab,body.setmode #tabs{display:none!important}
 body.frmode main>:not(#fpage),body.frmode #fab,body.frmode #tabs{display:none!important}
+body.wmode main>:not(#wpage),body.wmode #fab,body.wmode #tabs{display:none!important}
 .ov{display:grid;grid-template-columns:1fr 1fr;gap:16px}.ov small{display:block;color:var(--mute);font-size:12px}.ov b{font-weight:500;font-size:18px}
 .dotu{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:8px}
 .oc{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}.oc:last-child{border:0}.oc .ktag{flex:none;margin-top:2px}
@@ -233,6 +234,11 @@ html[data-pal=retro] #tabs button[data-p="2"]::before{background-image:url("data
 html[data-pal=retro] .empty::before{content:"";display:block;width:26px;height:26px;margin:0 auto 6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'%3E%3Crect x='2' y='0' width='6' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='1' width='6' height='1' fill='%23ffd84a'/%3E%3Crect x='8' y='1' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='2' width='8' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='2' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='3' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='3' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='4' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='6' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='4' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='4' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='5' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='2' y='5' width='1' height='1' fill='%23ff8aa0'/%3E%3Crect x='3' y='5' width='4' height='1' fill='%23ffd84a'/%3E%3Crect x='7' y='5' width='1' height='1' fill='%23ff8aa0'/%3E%3Crect x='8' y='5' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='5' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='6' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='2' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='3' y='6' width='4' height='1' fill='%23ffd84a'/%3E%3Crect x='7' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='8' y='6' width='1' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='6' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='0' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='7' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='3' y='7' width='4' height='1' fill='%233b2f2f'/%3E%3Crect x='7' y='7' width='2' height='1' fill='%23ffd84a'/%3E%3Crect x='9' y='7' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='1' y='8' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='8' width='6' height='1' fill='%23ffd84a'/%3E%3Crect x='8' y='8' width='1' height='1' fill='%233b2f2f'/%3E%3Crect x='2' y='9' width='6' height='1' fill='%233b2f2f'/%3E%3C/svg%3E") center/contain no-repeat;image-rendering:pixelated}
 html[data-pal=retro] .pgs{image-rendering:pixelated}
 html[data-pal=retro]{scrollbar-color:var(--bvm) var(--card)}
+
+.wgc{display:block;width:100%;text-align:start;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:12px;color:var(--ink);font:inherit}
+.wgk{display:flex;align-items:center;gap:12px}.wgl{cursor:pointer}
+.wgb{font-size:28px;font-weight:500;line-height:1.2}.wgt{font-size:20px;margin:4px 0}
+html[data-pal=retro] .wgc{background:var(--fld);border:2px solid;border-color:var(--bvm) var(--bvl) var(--bvl) var(--bvm);box-shadow:none}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
@@ -299,10 +305,11 @@ html[data-pal=retro]{scrollbar-color:var(--bvm) var(--card)}
 </section>
 <section id="spage" hidden><div id="spb"></div></section>
 <section id="fpage" hidden><div id="fpb"></div></section>
+<section id="wpage" hidden><div id="wpb"></div></section>
 <section id="setpage" hidden>
 <button class="ghost" type="button" id="sbk">› חזרה</button>
 <h1 class="sph" id="sttl">הגדרות</h1>
-<div id="sidx"><button class="srow" type="button" data-v="notif"><span class="grow"><b style="font-weight:500">התראות וסנכרון</b><div class="meta">תזכורות, התראות ומכשירים מחוברים</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="sched"><span class="grow"><b style="font-weight:500">מערכת ואירועים</b><div class="meta">סנכרון מבית הספר, אירועי השנה ושעות</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="prof"><span class="grow"><b style="font-weight:500">פרופיל ופרטיות</b><div class="meta">שם, ופרטיות מול חברים</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="theme"><span class="grow"><b style="font-weight:500">עיצוב וערכות נושא</b><div class="meta">מצב כהה או בהיר, צבעים וגופן</div></span><span class="meta">‹</span></button></div>
+<div id="sidx"><button class="srow" type="button" data-v="notif"><span class="grow"><b style="font-weight:500">התראות וסנכרון</b><div class="meta">תזכורות, התראות ומכשירים מחוברים</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="sched"><span class="grow"><b style="font-weight:500">מערכת ואירועים</b><div class="meta">סנכרון מבית הספר, אירועי השנה ושעות</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="prof"><span class="grow"><b style="font-weight:500">פרופיל ופרטיות</b><div class="meta">שם, ופרטיות מול חברים</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="home"><span class="grow"><b style="font-weight:500">מסך הבית ומסך "עכשיו"</b><div class="meta">קיצורי דרך, מסך מהיר ומספר על האייקון</div></span><span class="meta">‹</span></button><button class="srow" type="button" data-v="theme"><span class="grow"><b style="font-weight:500">עיצוב וערכות נושא</b><div class="meta">מצב כהה או בהיר, צבעים וגופן</div></span><span class="meta">‹</span></button></div>
 <div class="setp setup" data-p="notif" hidden>
   <div class="box">
     <div><label for="nm">תזכורת בוקר</label><input id="nm" type="time"></div>
@@ -369,6 +376,27 @@ html[data-pal=retro]{scrollbar-color:var(--bvm) var(--card)}
     <div class="hint">ההגדרות חלות על חברים שאישרת בלבד. אם לא הפעלת חברים, שום מידע לא נשלח.</div>
   </div>
 </div>
+<div class="setp setup" data-p="home" hidden>
+  <div class="box">
+    <b>מסך "עכשיו"</b>
+    <div class="hint">וידג'ט אמיתי במסך הבית אי אפשר ליצור באפליקציית אינטרנט. במקומו יש מסך מהיר אחד: השיעור הבא ושלוש המשימות הבוערות, עם כפתור התחלת פוקוס לכל משימה. אפשר להוסיף אותו למסך הבית כאייקון משלו.</div>
+    <button class="btn" type="button" id="wopen">פתח את מסך "עכשיו"</button>
+  </div>
+  <div class="box">
+    <b>הוספה למסך הבית</b>
+    <div class="hab"><b style="font-weight:500">אנדרואיד:</b> לחיצה ארוכה על אייקון StudentOS מציגה קיצורי דרך ל"עכשיו", למשימות ולפוקוס. אפשר לגרור כל אחד מהם למסך הבית.</div>
+    <div class="hab"><b style="font-weight:500">iPhone:</b> פתח את הקישור למטה ב-Safari, לחץ על שיתוף ואז "הוסף למסך הבית".</div>
+    <div class="frow"><div class="grow" style="flex:1">מסך "עכשיו"</div><button class="btn alt" type="button" data-l="widget">העתק קישור</button></div>
+    <div class="frow"><div class="grow" style="flex:1">המשימות שלי</div><button class="btn alt" type="button" data-l="tasks">העתק קישור</button></div>
+    <div class="frow"><div class="grow" style="flex:1">התחל פוקוס על המשימה הבוערת</div><button class="btn alt" type="button" data-l="focus">העתק קישור</button></div>
+    <div class="hint" id="hlm"></div>
+  </div>
+  <div class="box">
+    <b>מספר על האייקון</b>
+    <label class="chk"><input type="checkbox" id="bdg"> להציג את מספר המשימות שמגיעות היום</label>
+    <div class="hint">נתמך באנדרואיד, ב-iPhone מגרסה 16.4 ובמחשב, אחרי שהתקנת את האפליקציה.</div>
+  </div>
+</div>
 <div class="setp setup" data-p="theme" hidden><div class="box" id="thb"></div></div>
 </section>
 </main>
@@ -404,7 +432,7 @@ function render(){
   const now=new Date();
   $('date').textContent=now.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
   const ls=sched[now.getDay()]||[];
-  fbUI();synUI();
+  fbUI();synUI();badgeUI();
   const vw=viewDay(now);$('lessons').innerHTML=lessonsHTML(vw.d);eveUI(vw,now);
   const open=tasks.filter(t=>!t.done&&!t.del).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u);
   if(open.length<=3)showAll=false;
@@ -446,7 +474,7 @@ $('tasks').addEventListener('click',async e=>{
   if(b.id==='tgall'){showAll=!showAll;render();return}
   const id=+b.parentElement.dataset.id,t=tasks.find(x=>x.id===id);
   if(b.dataset.a==='edit'){openEdit(t);return}
-  if(b.dataset.a==='focus'){pom={end:Date.now()+25*6e4,mode:'work',name:t.name};return pomUI()}
+  if(b.dataset.a==='focus'){startFocus(t);return}
   if(b.dataset.a==='del'){t.del=Date.now();toast('המשימה נמחקה',()=>{delete t.del;save();render()})}
   else{
     const v=await askMin(t);
@@ -762,12 +790,13 @@ function pomUI(){
   if(left<=0){
     const w=pom.mode==='work';
     if(cfg.on&&Notification.permission==='granted')notify('StudentOS',w?'סבב סיים. הפסקה של 5 דקות':'ההפסקה נגמרה');
+    if(w)focusLog(pom);
     pom=w?{end:Date.now()+5*6e4,mode:'break',name:pom.name}:null;
     if(!pom){el.hidden=true;return}left=300;
   }
   el.hidden=false;
   el.innerHTML=`<div><div class="meta">${pom.mode==='work'?'מתמקדים ב':'הפסקה אחרי'}: ${esc(pom.name)}</div><div class="big">${pad(Math.floor(left/60))}:${pad(left%60)}</div></div><button class="btn alt" id="ps">עצור</button>`;
-  $('ps').onclick=()=>{pom=null;pomUI()};
+  $('ps').onclick=()=>{focusLog(pom);pom=null;pomUI()};
 }
 setInterval(pomUI,1000);
 
@@ -898,9 +927,9 @@ function pushSync(delay){
 function askMin(t){
   return new Promise(res=>{
     const d=$('dlg');
-    $('dlt').textContent=t.name;
+    $('dlt').textContent=t.name+(t.fm>=1?` · נמדדו ${Math.round(t.fm)} דק׳ בפוקוס`:'');
     $('dlc').innerHTML=[15,30,45,60,90,120].map(x=>`<button type="button" class="chip" data-m="${x}">${x>=60&&x%60===0?x/60+' ש׳':x+' דק׳'}</button>`).join('');
-    $('dli').value=t.est;
+    $('dli').value=t.fm>=1?Math.round(t.fm):t.est;
     const done=v=>{d.close();res(v)};
     $('dlc').onclick=e=>{const b=e.target.closest('button');if(b)done(b.dataset.m)};
     $('dlok').onclick=()=>done($('dli').value);
@@ -1158,7 +1187,7 @@ function renderProf(){
 }
 
 // ---- navigation: three swipeable panels, plus full pages (subject, settings) ----
-var pnIdx=0,setView=null,SETT={notif:'התראות וסנכרון',sched:'מערכת ואירועים',prof:'פרופיל ופרטיות',theme:'עיצוב וערכות נושא'};
+var pnIdx=0,setView=null,SETT={notif:'התראות וסנכרון',sched:'מערכת ואירועים',prof:'פרופיל ופרטיות',home:'מסך הבית ומסך "עכשיו"',theme:'עיצוב וערכות נושא'};
 function showPanel(i){
   pnIdx=Math.max(0,Math.min(2,i));
   [0,1,2].forEach(k=>{$('pn'+k).classList.toggle('on',k===pnIdx);const t=$('tabs').children[k];t.classList.toggle('on',k===pnIdx);t.setAttribute('aria-current',k===pnIdx?'page':'false')});
@@ -1193,11 +1222,11 @@ function renderSubs(){
 $('sublist').addEventListener('click',e=>{const b=e.target.closest('.srow[data-s]');if(b)openSubj(b.dataset.s,'')});
 function openPage(kind){
   const was=pgOpen;pgOpen=kind;
-  document.body.classList.toggle('subjmode',kind==='subj');document.body.classList.toggle('setmode',kind==='set');document.body.classList.toggle('frmode',kind==='fr');
-  $('spage').hidden=kind!=='subj';$('setpage').hidden=kind!=='set';$('fpage').hidden=kind!=='fr';window.scrollTo(0,0);
+  document.body.classList.toggle('subjmode',kind==='subj');document.body.classList.toggle('setmode',kind==='set');document.body.classList.toggle('frmode',kind==='fr');document.body.classList.toggle('wmode',kind==='w');
+  $('spage').hidden=kind!=='subj';$('setpage').hidden=kind!=='set';$('fpage').hidden=kind!=='fr';$('wpage').hidden=kind!=='w';window.scrollTo(0,0);
   if(!was){try{history.pushState({pg:1},'');pgPushed=true}catch(e){pgPushed=false}}
 }
-function closePage(){pgOpen=null;document.body.classList.remove('subjmode','setmode','frmode');$('spage').hidden=true;$('setpage').hidden=true;$('fpage').hidden=true;render()}
+function closePage(){pgOpen=null;document.body.classList.remove('subjmode','setmode','frmode','wmode');$('spage').hidden=true;$('setpage').hidden=true;$('fpage').hidden=true;$('wpage').hidden=true;render()}
 function backPage(){if(pgPushed){pgPushed=false;try{history.back();return}catch(e){}}closePage()}
 function openSubj(sub,teacher){spSub=sub;spTeacher=teacher||'';spRender();openPage('subj')}
 function setRender(){
@@ -1588,14 +1617,103 @@ $('frb').onclick=openFriends;
 setInterval(()=>{if(pgOpen==='fr'&&!document.hidden)frLoad()},60000);
 setInterval(()=>{if(fr&&!document.hidden)frPush()},30*6e4);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(pgOpen==='fr')frLoad();frPushSoon()}});
+var QS=new URLSearchParams(location.search);
 // a friend's invitation link opens this screen with their code ready
-{const q=new URLSearchParams(location.search).get('add');
+{const q=QS.get('add');
  if(q){frAdd=q.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);try{history.replaceState(null,'',location.pathname)}catch(e){};setTimeout(openFriends,400)}}
 // keep the shared snapshot fresh whenever the schedule, events, name or privacy change
 {const _ps=pushSync;pushSync=function(){frPushSoon();return _ps.apply(this,arguments)}}
 $('nmn').addEventListener('change',frPushSoon);
 ['gh1','gh2'].forEach(i=>$(i).addEventListener('change',frPushSoon));
 if(fr)setTimeout(frPush,3000);
+
+// ---- stage 7: quick "now" screen (the closest thing to a widget in a web app), focus tracking, icon badge ----
+function startFocus(t){
+  if(pom&&pom.mode==='work')focusLog(pom);
+  pom={end:Date.now()+25*6e4,mode:'work',name:t.name,id:t.id,start:Date.now()};pomUI();
+}
+// the time spent in a focus session is kept on the task, offered as the actual time when it is finished,
+// and then flows into the time estimates like any other finished task
+function focusLog(p){
+  if(!p||p.mode!=='work'||!p.id)return;
+  const t=tasks.find(x=>x.id===p.id);if(!t)return;
+  const m=(Math.min(Date.now(),p.end)-p.start)/6e4;
+  if(m>=0.5){t.fm=Math.round(((t.fm||0)+m)*10)/10;save()}
+}
+function topTasks(n){return tasks.filter(t=>!t.done&&!t.del).map(t=>({...t,u:urgency(t)})).sort((a,b)=>b.u-a.u).slice(0,n)}
+// the lesson in progress, or the next one that is not cancelled (skipping vacation days)
+function nextClass(now){
+  buildOff();
+  for(let i=0;i<8;i++){
+    const d=addD(now,i);if(offMap[iso(d)])continue;
+    const ls=dayLessons(d.getDay(),wkOk(d)).filter(l=>l.start&&l.status!=='cancel').sort((x,y)=>toMin(x.start)-toMin(y.start));
+    for(const l of ls){
+      const a=toMin(l.start),b=l.end?toMin(l.end):a+45,t0=new Date(d),t1=new Date(d);
+      t0.setHours(Math.floor(a/60),a%60,0,0);t1.setHours(Math.floor(b/60),b%60,0,0);
+      if(t1>now)return {l,d,t0,t1,live:t0<=now,days:i};
+    }
+  }
+  return null;
+}
+function wDay(t){
+  const a=new Date(t.due);a.setHours(0,0,0,0);const n=new Date();n.setHours(0,0,0,0);
+  const diff=Math.round((a-n)/864e5);
+  return diff<=0?['היום','t-fclass']:diff===1?['מחר','t-fevent']:['','t-free'];
+}
+function wRender(){
+  const now=new Date(),nc=nextClass(now),tt=topTasks(3);
+  let cls='<div class="wgc"><div class="meta">השיעור הבא</div><div class="empty">אין שיעורים בימים הקרובים.</div></div>';
+  if(nc){
+    const l=nc.l,mins=Math.max(0,Math.round(((nc.live?nc.t1:nc.t0)-now)/6e4));
+    const when=nc.live?'עכשיו':nc.days===0?'היום':nc.days===1?'מחר':'יום '+nc.d.toLocaleDateString('he-IL',{weekday:'long'}).replace('יום ','');
+    const left=nc.live?`נגמר בעוד ${hm(mins)}`:nc.days===0?`מתחיל בעוד ${hm(mins)}`:`מתחיל ב-${l.start}`;
+    const det=[l.room?'כיתה '+esc(l.room):'',l.teacher?esc(l.teacher):''].filter(Boolean).join(' · ');
+    cls=`<button class="wgc wgl" type="button" data-s="${esc(l.subject)}" data-t="${esc(l.teacher||'')}"><div class="meta">${when}</div><div class="wgb">${esc(l.subject)}</div><div class="wgt">${esc(l.start)}${l.end?'-'+esc(l.end):''}</div>${det?`<div class="meta">${det}</div>`:''}<div class="meta">${left}</div></button>`;
+  }
+  const tk=tt.length?tt.map(t=>{
+    const w=wDay(t),on=pom&&pom.id===t.id&&pom.mode==='work';
+    return `<div class="wgc wgk"><div class="grow" style="flex:1"><div class="wgb" style="font-size:18px">${esc(t.name)}</div><div class="meta">${esc(t.sub)} · עד ${fmt(t.due)} · ${t.est} דק׳</div></div>${w[0]?`<em class="ktag ${w[1]}">${w[0]}</em>`:''}<button class="btn" type="button" data-a="wgs" data-id="${t.id}">${on?'ממשיך':'התחל'}</button></div>`;
+  }).join(''):'<div class="wgc"><div class="empty">אין משימות פתוחות.</div></div>';
+  const timer=pom?`<div class="wgc"><div class="meta">${pom.mode==='work'?'מתמקדים ב':'הפסקה אחרי'}: ${esc(pom.name)}</div><div class="wgb" id="wgt"></div><div class="row"><button class="btn alt" type="button" data-a="wgstop">עצור</button></div></div>`:'';
+  $('wpb').innerHTML=`<button class="ghost" type="button" data-a="back">› חזרה</button><h1 class="sph">עכשיו</h1>${timer}${cls}<h2 class="spt" style="margin:20px 0 4px">המשימות הבוערות</h2>${tk}`;
+  wTick();
+}
+function wTick(){const el=$('wgt');if(!el||!pom)return;const left=Math.max(0,Math.round((pom.end-Date.now())/1000));el.textContent=pad(Math.floor(left/60))+':'+pad(left%60)}
+function openWidget(){wRender();openPage('w')}
+$('wpb').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.a==='back'){backPage();return}
+  if(b.classList.contains('wgl')){openSubj(b.dataset.s,b.dataset.t);return}
+  if(b.dataset.a==='wgs'){const t=tasks.find(x=>x.id===+b.dataset.id);if(t){startFocus(t);wRender()}return}
+  if(b.dataset.a==='wgstop'){focusLog(pom);pom=null;pomUI();wRender()}
+});
+setInterval(()=>{if(pgOpen==='w'){if(!!$('wgt')!==!!pom)wRender();else wTick()}},1000);
+setInterval(()=>{if(pgOpen==='w'&&!document.hidden)wRender()},30000);
+// number on the app icon: tasks that are due today or overdue
+function badgeUI(){
+  if(!navigator.setAppBadge)return;
+  try{
+    const t0=new Date();t0.setHours(23,59,59,999);
+    const n=store.get('so_badge',true)?tasks.filter(t=>!t.done&&!t.del&&new Date(t.due)<=t0).length:0;
+    (n?navigator.setAppBadge(n):navigator.clearAppBadge()).catch(()=>{});
+  }catch(e){}
+}
+$('bdg').checked=store.get('so_badge',true);
+$('bdg').addEventListener('change',()=>{store.set('so_badge',$('bdg').checked);badgeUI()});
+$('wopen').onclick=()=>openWidget();
+$('setpage').addEventListener('click',async e=>{
+  const b=e.target.closest('button[data-l]');if(!b)return;
+  const url=location.origin+location.pathname+'?go='+b.dataset.l;
+  try{await navigator.clipboard.writeText(url);$('hlm').textContent='הקישור הועתק.'}catch(x){$('hlm').textContent=url}
+});
+// links from the home screen: ?go=widget | tasks | focus
+{const g=QS.get('go');
+ if(g){try{history.replaceState(null,'',location.pathname)}catch(e){}
+  setTimeout(()=>{
+    if(g==='tasks')showPanel(1);
+    else if(g==='focus'){const t=topTasks(1)[0];if(t)startFocus(t);openWidget()}
+    else if(g==='widget')openWidget();
+  },400)}}
 
 // ---- evening switch: from the set hour the main screen shows the next school day ----
 var evView=null; // 'today' when the person asked to keep seeing today
